@@ -1,24 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from "./component/Header";
+import Post from "./layout/Post";
+import { MathJaxContext } from "better-react-mathjax";
+import Footer from "./component/Footer";
+import { Route, Routes } from "react-router-dom";
+import styled from "styled-components";
+
+const Root = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+`;
+
+const Container = styled.div`
+  flex: 1; /* This makes the main content area take up remaining space */
+`;
+
+const config = {
+  loader: { load: ["[tex]/html"] },
+  tex: {
+    packages: { "[+]": ["html"] },
+    inlineMath: [
+      ["$", "$"],
+      ["\\(", "\\)"]
+    ],
+    displayMath: [
+      ["$$", "$$"],
+      ["\\[", "\\]"]
+    ]
+  }
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MathJaxContext config={config}>
+    <Root>
+      <Header />
+      <Container>
+        <Routes>
+          <Route path="/" element={null} />
+          <Route path="/post" element={null}>
+            <Route path=":tag" element={<Post />} />
+          </Route>
+        </Routes>
+      </Container>
+      <Footer />
+    </Root>
+    </MathJaxContext>
   );
 }
 
