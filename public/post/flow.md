@@ -424,10 +424,8 @@ class Graph:
 
 한 단계를 더 수행해본다. 즉, 다시 레벨 그래프를 구축하고 차단 유량을 흘린다. 아래 레벨 그래프 그림은 잔여 용량을 간선의 원래 용량처럼 보고 레벨 그래프를 그린 것이다.
 
-<div style="column-count: 2; margin-bottom: 16px">
-    <img class="post-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Dinic_algorithm_GL2.svg/1920px-Dinic_algorithm_GL2.svg.png" style="background-color: white">
-    <img class="post-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Dinic_algorithm_G3.svg/1920px-Dinic_algorithm_G3.svg.png" style="background-color: white">
-</div>
+<img class="post-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Dinic_algorithm_GL2.svg/1920px-Dinic_algorithm_GL2.svg.png" style="background-color: white">
+<img class="post-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Dinic_algorithm_G3.svg/1920px-Dinic_algorithm_G3.svg.png" style="background-color: white">
 
 한 단계를 더 반복해 레벨 그래프를 구축하면 다음과 같이 더 이상 싱크까지 레벨 그래프를 구축할 수 없다. 이렇게 되면 디닉 알고리즘은 끝이 난다.
 

@@ -6,27 +6,20 @@
 
 정점의 개수가 $N$인 그래프에서 시작점 $\text A$에 대하여 최단 거리표 $W_{k}$을 다음과 같이 정의하자.
 
-$$
-W_{k}[n] \overset{\underset{\mathrm{def}}{}}{=} \left( \displaylines{\text{시작점에서 출발해} \\ \text{간선을 }k\text{개 이하로 거쳐} \\ \text{정점 }n\text{로 가는} \\ \text{최소 경로의 길이}} \right)
-$$
+> $W_{k}[n] \overset{\underset{\mathrm{def}}{}}{=}$ 시작점에서 출발해 간선을 $k$개 이하로 거쳐 정점 $n$로 가는 최소 경로의 길이
 
 만약 그러한 경로가 없을 경우에는 무한대로 간주한다. $W_{0}$은 $W_{0}[A]$만 0으로 초기화하고 나머지 셀은 전부 무한으로 초기화한다. $W_{k}$를 안다고 가정하자. 이를 바탕으로 $W_{k+1}$를 구할 수 있을까? $W_{k+1}$는 $W_{k}$의 경로에서 간선을 한 번 더 지날 수 있게 된 것으로 해석할 수 있다.
 
 <pre class="mermaid">
     graph LR
-    A -- <span class="mathjax mj1"></span> --> I
-    A -- <span class="mathjax mj2"></span> --> J
-    I -- <span class="mathjax mj3"></span> --> J
+    A -- <p style="color: #888">W<sub>k</sub>[I]</p> --> I
+    A -- <p style="color: #888">W<sub>k</sub>[J]</p> --> J
+    I -- <p style="color: #888">c</p> --> J
 
     A((A))
     I((I))
     J((J))
 </pre>
-<ol class="mathjax">
-    <li class="mj1">$W_{k}[\text I]$</li>
-    <li class="mj2">$W_{k}[\text J]$</li>
-    <li class="mj3">$c$</li>
-</ol>
 
 만약 정점 $\text I$에서 정점 $\text J$로 가는 간선의 가중치가 $c$이고 $W_{k}[\text I] + c < W_{k}[\text J]$라면 (즉 $W_{k}[\text I]$가 함유하는 방법으로 정점 $\text I$로 간 뒤 가중치가 $c$인 간선을 통해 정점 $\text J$로 가는 방법이 기존의 $W_{k}[\text J]$의 방법보다 거리가 짧다면) $W_{k+1}[\text J]$를 $W_{k}[\text I] + c$로 결정할 수 있을 것이다. 이러한 방식으로 $W_{0}$으로부터 $W_{1}$을 구하고, $W_{1}$로부터 $W_{2}$을 구하며, 재귀적으로 $W_{N-1}$을 구할 수 있다. $W_{N-1}$은 $N-1$개 이하의 간선을 거쳐 갈 때의 최단 거리이므로 우리가 구하고자 하는 궁극적인 최단 거리표가 될 것이다.
 

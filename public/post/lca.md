@@ -49,7 +49,7 @@
 
     root --> C
     C --> Ap
-    Ap -- <span class="mathjax mj1"></span> --> A
+    Ap -- <p style="color: #888">d</p> --> A
     C --> B
 
     root((Root))
@@ -58,9 +58,6 @@
     B(("<span style="display: inline-block; width: 1em">B</span>"))
     C(("<span style="display: inline-block; width: 1em">C</span>"))
 </pre>
-<ol class="mathjax">
-    <li class="mj1">$d$</li>
-</ol>
 
 우선 정점 $\text A$에서부터 정점 $\text B$와 깊이가 같은 정점인 $\text A'$까지 거슬러 올라온다. 그러기 위해서 거슬러 올라가야 하는 거리인 $d$를 구한다. 이는 간단히 정점 $\text A$의 깊이에서 정점 $\text B$의 깊이를 뺀 값이다. 예시로 $d = 13$이라고 해보자. 이는 다음과 같이 표현할 수 있다.
 
@@ -73,34 +70,27 @@ $$
 <pre class="mermaid">
     graph LR
 
-    A -. <span class="mathjax mj1"></span> .-> node1
-    node1 -. <span class="mathjax mj2"></span> .-> node2
-    node2 -. <span class="mathjax mj3"></span> .-> Ap
+    A -. <p style="color: #888">2<sup>3</sup></p> .-> node1
+    node1 -. <p style="color: #888">2<sup>2</sup></p> .-> node2
+    node2 -. <p style="color: #888">2<sup>0</sup></p> .-> Ap
 
     A(("<span style="display: inline-block; width: 1em">A</span>"))
     Ap(("<span style="display: inline-block; width: 1em">A'</span>"))
     node1(( ))
     node2(( ))
 </pre>
-<ol class="mathjax">
-    <li class="mj1">$2^3$</li>
-    <li class="mj2">$2^2$</li>
-    <li class="mj3">$2^0$</li>
-</ol>
 
 즉, 정점 $\text A$에서 정점 $\text A'$로 가는 데 $O(\log N)$의 시간이 든다. 이제 정점 $\text A'$과 $\text B$에서 동시에 $\text C$를 향해 올라온다. 거슬러 올라갈 조상 정점을 선택할 떄는 $\text C$를 넘어서서 거슬러 올라가지 않으면서 가장 멀리 갈 수 있는 정점을 선택하면 된다. 이를 수학적으로 표현하면, 다음 집합의 최댓값 $m$에 대해 $2^m$번째 조상으로 계속해서 거슬러 올라가는 과정을 반복하면 된다.
 
-$$
-\lbrace 0 \rbrace \cap \lbrace k | \text 2^k\text{번째 조상이 같지 않음}\rbrace
-$$
+> $\lbrace 0 \rbrace \cap \lbrace k | \text 2^k$번째 조상이 같지 않음$\rbrace$
 
 <pre class="mermaid">
     graph TD
 
     subgraph O
         direction LR
-        Ap1 -. <span class="mathjax mj1"></span> .-> node1
-        B1 -. <span class="mathjax mj2"></span> .-> node2
+        Ap1 -. <p style="color: #888">2<sup>k</sup></p> .-> node1
+        B1 -. <p style="color: #888">2<sup>k</sup></p> .-> node2
         node1 -.-> C1
         node2 -.-> C1
         C1 -.-> root1
@@ -110,9 +100,9 @@ $$
         direction LR
         Ap2 -.-> C2
         B2 -.-> C2
-        Ap2 -. <span class="mathjax mj3"></span> .-> node3
+        Ap2 -. <p style="color: #888">2<sup>k+1</sup></p> .-> node3
         C2 -.-> node3
-        B2 -. <span class="mathjax mj4"></span> .-> node3
+        B2 -. <p style="color: #888">2<sup>k+1</sup></p> .-> node3
         node3 -.-> root2
     end
 
@@ -128,12 +118,6 @@ $$
     node2(( ))
     node3(( ))
 </pre>
-<ol class="mathjax">
-    <li class="mj1">$2^k$</li>
-    <li class="mj2">$2^k$</li>
-    <li class="mj3">$2^{k+1}$</li>
-    <li class="mj4">$2^{k+1}$</li>
-</ol>
 
 위 과정을 반복하면 최소 공통 조상인 정점 $\text C$에서 만나게 될 것이다. 이 과정 역시 $O(\log N)$의 시간이 든다. 따라서 다이나믹 프로그래밍 기법을 사용한 최소 공통 조상 문제 풀이의 시간복잡도는 $O(\log N)$이다.
 

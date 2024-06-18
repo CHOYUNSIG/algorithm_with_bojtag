@@ -7,6 +7,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
+import remarkGfm from "remark-gfm";
 import rehypeMathjax from "rehype-mathjax";
 import mermaid from "mermaid";
 import "highlight.js/styles/github-dark.css";
@@ -17,13 +18,18 @@ export default function Post() {
   const { tag } = useParams();
 
   useEffect(() => {
+    mermaid.initialize({
+      fontFamily: "math",
+    });
     csvLoader("impl", (impl) => {
       const md = impl.get(tag)["md"];
-      csvLoader("posts", (posts) => {setMeta(posts.get(md));});
+      csvLoader("posts", (posts) => {
+        setMeta(posts.get(md));
+      });
       fetch("/post/" + md + ".md")
-      .then((response) => response.text())
-      .then((text) => setMarkdown(text));
-    })
+        .then((response) => response.text())
+        .then((text) => setMarkdown(text));
+    });
   }, [tag]);
 
   useEffect(() => {
@@ -42,7 +48,7 @@ export default function Post() {
       <PostArticle
         content={
           <ReactMarkdown
-            remarkPlugins={[remarkMath]}
+            remarkPlugins={[remarkMath, remarkGfm]}
             rehypePlugins={[rehypeHighlight, rehypeRaw, rehypeMathjax]}
           >
             {markdown}

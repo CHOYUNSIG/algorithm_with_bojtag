@@ -6,27 +6,25 @@
 
 오일러 경로 테크닉은 쉽게 말해서 DFS로 정점에 순서를 부여하고 그 순서대로 나열하는 것이다. 아래 트리를 오일러 경로 테크닉을 통해 정점에 순서를 부여해보자.
 
-<div style="column-count: 2">
-    <pre class="mermaid">
-        graph TD
-        A --> B
-        A --> C
-        A --> D
-        B --> E
-        B --> F
-        E --> G
+<pre class="mermaid">
+    graph TD
+    A --> B
+    A --> C
+    A --> D
+    B --> E
+    B --> F
+    E --> G
 
-        A((A))
-        B((B))
-        C((C))
-        D((D))
-        E((E))
-        F((F))
-        G((G))
-    </pre>
+    A((A))
+    B((B))
+    C((C))
+    D((D))
+    E((E))
+    F((F))
+    G((G))
+</pre>
 
-    <img class="post-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Stirling_permutation_Euler_tour.svg/306px-Stirling_permutation_Euler_tour.svg.png" style="background-color: white">
-</div>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Stirling_permutation_Euler_tour.svg/306px-Stirling_permutation_Euler_tour.svg.png" style="background-color: white"/>
 
 위 트리를 옆의 그림과 같이 DFS 방식으로 순회하면서 각 정점에 총 두 개의 번호 $\text{in}$, $\text{out}$을 부여한다. $\text{in}$은 DFS를 하면서 정점에 방문한 순서이고, $\text{out}$은 해당 정점을 탈출하는 시점에서 다음으로 방문할 정점에 부여할 $\text{in}$ 번호이다. 번호를 전부 매기면 다음과 같이 될 것이다.
 
@@ -83,42 +81,28 @@ $$
 
     A((Parent))
     B(("Child 1
-    <span class="mathjax mj1"></span>"))
+    <p>in = w, out = x</p>"))
     C(("Child 2
-    <span class="mathjax mj2"></span>"))
+    <p>in = x, out = y</p>"))
     D(("Child 3
-    <span class="mathjax mj3"></span>"))
+    <p>in = y, out = z</p>"))
 </pre>
-<ol class="mathjax">
-    <li class="mj1">$\text{in} = w, \text{out} = x$</li>
-    <li class="mj2">$\text{in} = x, \text{out} = y$</li>
-    <li class="mj3">$\text{in} = y, \text{out} = z$</li>
-</ol>
 
 전진할 자식 정점을 선택하려면 자식 정점들의 $\text{in}$ 번호와 $\text{out}$ 번호가 나타내는 범위를 보면 된다. 탐색하는 정점의 $\text{in}$ 번호를 $m$이라고 하면 자식 정점 중 $m$을 범위에 포함하고 있는 정점로 전진한다. 왜냐하면 $\text{in} \le m < \text{out}$는 곧 그 정점을 서브 트리의 정점로 가지고 있다는 뜻이기 때문이다.
 
 <pre class="mermaid">
     graph TD
         A --> B
-        A -- <span class="mathjax mj0"></span> --> C
+        A -- <p>if (x <= m < y)</p> --> C
         A --> D
 
     A((Parent))
-    B(("Child 1
-    <span class="mathjax mj1"></span>"))
-    C(("Child 2
-    <span class="mathjax mj2"></span>")):::red
-    D(("Child 3
-    <span class="mathjax mj3"></span>"))
+    B((Child 1))
+    C((Child 2)):::red
+    D((Child 3))
 
     classDef red stroke:#F00, fill:#FEE
 </pre>
-<ol class="mathjax">
-    <li class="mj0">$\text{if }x \le m < y$</li>
-    <li class="mj1">$\text{in} = w, \text{out} = x$</li>
-    <li class="mj2">$\text{in} = x, \text{out} = y$</li>
-    <li class="mj3">$\text{in} = y, \text{out} = z$</li>
-</ol>
 
 각 정점 안에서는 자식 정점들이 $\text{in}$ 번호 기준으로 정렬되어 있으므로 해당되는 자식 정점을 선택할 때 이분 탐색을 적용할 수 있다. 
 

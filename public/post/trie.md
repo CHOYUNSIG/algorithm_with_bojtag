@@ -6,7 +6,7 @@
 
 다음 문자열 집합을 트라이로 저장해보자.
 
-$$\lbrace\text{apple, apollo, ban, banana}\rbrace$$
+> $\lbrace\text{apple, apollo, ban, banana}\rbrace$
 
 문자열의 각 문자를 경로라고 생각하고 트리를 구성하면 된다. 이를테면 $\text{apple}$이라는 문자열은 트리의 루트부터 차례대로 $\text a$, $\text p$, $\text p$, $\text l$, $\text e$의 간선을 만들어주면 된다.
 
@@ -103,7 +103,7 @@ $$\lbrace\text{apple, apollo, ban, banana}\rbrace$$
 
 - 문자열이 존재하는 경우
 
-💡 주어진 문자열 = $\text{apollo}$
+> 주어진 문자열 = $\text{apollo}$
 
 문자열과 매칭되는 루트가 존재하므로 이 문자열은 집합에 존재한다.
 
@@ -148,7 +148,7 @@ $$\lbrace\text{apple, apollo, ban, banana}\rbrace$$
     
 - 문자열이 존재하지 않는 경우
 
-💡 주어진 문자열 = $\text{application}$
+> 주어진 문자열 = $\text{application}$
 
 문자열과 매칭되는 루트가 존재하지 않으므로 이 문자열은 집합에 존재하지 않는다.
 
@@ -192,7 +192,7 @@ $$\lbrace\text{apple, apollo, ban, banana}\rbrace$$
     classDef error stroke:#f00, fill:#FEE
 </pre>
 
-💡 주어진 문자열 = $\text{bana}$
+> 주어진 문자열 = $\text{bana}$
 
 문자열과 매칭되는 루트는 존재하지만, 초록색 정점에서 끝나지 않으므로 이 문자열은 집합에 존재하지 않는다.
 
@@ -236,7 +236,7 @@ $$\lbrace\text{apple, apollo, ban, banana}\rbrace$$
     classDef error stroke:#f00, fill:#FEE
 </pre>
 
-<p>트라이에 임의의 문자열이 존재하는지를 평가할 때의 시간복잡도는 그 문자열의 길이인 $O(|S|)$가 될 것이다. 이는 집합에 속한 모든 문자열에 대해서 일치 여부를 검사하는 시간보다 적다.</p>
+트라이에 임의의 문자열이 존재하는지를 평가할 때의 시간복잡도는 그 문자열의 길이인 $O(|S|)$가 될 것이다. 이는 집합에 속한 모든 문자열에 대해서 일치 여부를 검사하는 시간보다 적다.
 
 ## 구현
 

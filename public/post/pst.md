@@ -45,42 +45,35 @@
 
 하지만 퍼시스턴트 세그먼트 트리는 정점의 값을 수정하지 않는다. 퍼시스턴트 세그먼트 트리에서는 새로운 값을 지닌 정점을 새로 만들어 연결해준다. 우선 새로운 루트 정점을 생성하고 3번 인덱스를 가리키는 리프 정점까지 새로운 값으로 만들어준다. 그 후 만들어준 정점들과 기존에 있던 정점들을 대응되는 자리에 연결해준다.
 
-<div style="column-count: 2">
-    <pre class="mermaid">
-        graph TD
+<pre class="mermaid">
+    graph TD
 
-        A --> B1
-        B1 --> C2
-        C2 --> D4
+    pA --> pB1
+    pB1 --> pC2
+    pC2 --> pD4
 
-        A(0 ~ 7):::green
-        B1(0 ~ 3):::green
-        C2(2 ~ 3):::green
-        D4(3):::green
+    pA(0 ~ 7):::green
+    pB1(0 ~ 3):::green
+    pC2(2 ~ 3):::green
+    pD4(3):::green
 
-        classDef green stroke:#0F0, fill:#EFE
-    </pre>
-    <pre class="mermaid">
-        graph TD
+    A --> B1
+    A --> B2
+    B1 --> C1
+    B1 --> C2
+    C2 --> D3
+    C2 --> D4
 
-        A --> B1
-        A --> B2
-        B1 --> C1
-        B1 --> C2
-        C2 --> D3
-        C2 --> D4
+    A(0 ~ 7):::green
+    B1(0 ~ 3):::green
+    B2(4 ~ 7)
+    C1(0 ~ 1)
+    C2(2 ~ 3):::green
+    D3(2)
+    D4(3):::green
 
-        A(0 ~ 7):::green
-        B1(0 ~ 3):::green
-        B2(4 ~ 7)
-        C1(0 ~ 1)
-        C2(2 ~ 3):::green
-        D3(2)
-        D4(3):::green
-
-        classDef green stroke:#0F0, fill:#EFE
-    </pre>
-</div>
+    classDef green stroke:#0F0, fill:#EFE
+</pre>
 
 이 결과 세그먼트 트리의 루트 정점이 두 개가 된다. 하나는 인덱스 수정 쿼리가 처리되기 전의 루트이며, 다른 하나는 쿼리 처리 후의 루트이다. 각각의 루트 정점을 통해서 우리는 세그먼트 트리의 쿼리 처리 전의 상태와 처리 후의 상태를 모두 들여다볼 수 있게 되었다.
 
@@ -284,7 +277,7 @@ class SegmentTree:
 
 주어진 평면의 $x$축을 시간축으로 보자. $y$축 크기만큼의 배열을 퍼시스턴트 세그먼트 트리로 관리하며 처음($t=0$)에는 배열의 값을 전부 0으로 초기화한다. 점들을 시간($x$ 좌표값)순으로 나열하고 이 순서대로 점들의 $y$ 좌표에 해당하는 인덱스에 더하기 1을 해준다. 위의 예시의 경우 7개의 점에 대해 각각 $t$번째 점마다 트리에 다음과 같은 상태들이 저장될 것이다.
 
-<img class="post-image" src="{{ site.url }}{{ site.baseurl }}/assets/images/posts/pst-1.png" style="background-color: white">
+<img class="post-image" src="/img/post/pst-1.png" style="background-color: white">
 
 | $y$   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
 | ---   | - | - | - | - | - | - | - | - | - | - |
@@ -299,10 +292,10 @@ class SegmentTree:
 
 이렇게 관리를 하게 되면 시점 $t$에서의 $\left[l, r\right)$ 범위의 구간 합은 $x$ 좌표값 순으로 $t$번째의 점과 그 왼쪽에 있는 점들 중에서 $y$ 좌표가 $\left[l, r\right)$ 범위 안에 있는 모든 점들의 개수가 된다. 예시로, $t=6$에서의 $\left[4, 8\right)$ 범위의 구간 합은 다음 그림의 빨간 영역에 걸쳐있는 점의 개수이다.
 
-<img class="post-image" src="{{ site.url }}{{ site.baseurl }}/assets/images/posts/pst-2.png" style="background-color: white">
+<img class="post-image" src="/img/post/pst-2.png" style="background-color: white">
 
 이제 이 퍼시스턴트 세그먼트 트리를 바탕으로 쿼리를 처리해보자. `3 4 7 8`의 답은 무엇일까? $x$ 좌표가 $\left[3, 7\right)$ 범위에 속해있는 점들 중 $x$ 좌표값 순으로 가장 뒤에 있는 점은 $(6, 5)$(5번째 점)이다. 그리고 $x$ 좌표가 $\left[3, 7\right)$ 범위의 왼쪽, 즉 3보다 작은 점들 중 $x$ 좌표값 순으로 가장 뒤에 있는 점은 $(2, 6)$(1번째 점)이다. 따라서 정답은 시점 $t=5$에서의 $\left[4, 8\right)$ 구간 합에서 시점 $t=1$에서의 $\left[4, 8\right)$ 구간 합을 뺌으로서 구할 수 있다. 
 
-<img class="post-image" src="{{ site.url }}{{ site.baseurl }}/assets/images/posts/pst-3.png" style="background-color: white">
+<img class="post-image" src="/img/post/pst-3.png" style="background-color: white">
 
 퍼시스턴트 세그먼트 트리를 이용하면 위 문제의 명령을 $O(\log N)$의 시간복잡도로 해결할 수 있다.
