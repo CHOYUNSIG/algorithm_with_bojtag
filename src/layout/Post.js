@@ -1,38 +1,52 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
+import csvLoader from "../util/csvLoader";
 import PostBanner from "../component/PostBanner";
 import PostArticle from "../component/PostArticle";
+import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
-import { MathJax } from "better-react-mathjax";
+import remarkMath from "remark-math";
+import rehypeMathjax from "rehype-mathjax";
+import mermaid from "mermaid";
 import "highlight.js/styles/github-dark.css";
 
 export default function Post() {
   const [markdown, setMarkdown] = useState("");
+  const [meta, setMeta] = useState({});
   const { tag } = useParams();
 
   useEffect(() => {
-    fetch("/post/" + tag + ".md")
+    csvLoader("impl", (impl) => {
+      const md = impl.get(tag)["md"];
+      csvLoader("posts", (posts) => {setMeta(posts.get(md));});
+      fetch("/post/" + md + ".md")
       .then((response) => response.text())
       .then((text) => setMarkdown(text));
+    })
   }, [tag]);
+
+  useEffect(() => {
+    mermaid.contentLoaded();
+  }, [markdown]);
 
   return (
     <>
       <PostBanner
-        title={tag}
-        subtitle={tag}
-        date="2024/02/01"
+        title={meta.title}
+        subtitle={meta.subtitle}
+        date={meta.date}
+        writer={meta.writer}
         tag_list={["tag1", "tag2"]}
       />
       <PostArticle
         content={
-          <MathJax>
-            <ReactMarkdown rehypePlugins={[rehypeHighlight, rehypeRaw]}>
-              {markdown}
-            </ReactMarkdown>
-          </MathJax>
+          <ReactMarkdown
+            remarkPlugins={[remarkMath]}
+            rehypePlugins={[rehypeHighlight, rehypeRaw, rehypeMathjax]}
+          >
+            {markdown}
+          </ReactMarkdown>
         }
       />
     </>

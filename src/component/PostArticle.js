@@ -10,6 +10,7 @@ const ArticleWrapper = styled.section`
   justify-content: center;
 
   .mermaid {
+    max-width: 100vw;
     display: flex;
     flex-direction: row;
     justify-content: center;

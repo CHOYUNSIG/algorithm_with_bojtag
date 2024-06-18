@@ -1,0 +1,14 @@
+﻿tag,md
+hld,hld
+bellman_ford,bellman_ford
+dijkstra,dijkstra
+disjoint_set,disjoint_set
+euler_tour_technique,euler_tour_technique
+flow,flow
+floyd_warshall,floyd_warshall
+lazyprop,lazyprop
+lca,lca
+priority_queue,priority_queue
+pst,pst
+segtree,segtree
+trie,trie

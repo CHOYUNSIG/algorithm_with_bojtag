@@ -32,7 +32,7 @@ const PostTag = styled(PostMeta)`
   padding: 10px 0px;
 `;
 
-export default function PostBanner({ title, subtitle, date, tag_list }) {
+export default function PostBanner({ title, subtitle, date, writer, tag_list }) {
   return (
     <BannerWrapper>
       <BannerWidth>
@@ -46,7 +46,7 @@ export default function PostBanner({ title, subtitle, date, tag_list }) {
           </IconSpan>
           <IconSpan>
             <i className="fa fa-pen"></i>
-            <span>CHOYUNSIG</span>
+            <span>{writer}</span>
           </IconSpan>
         </PostMeta>
 
