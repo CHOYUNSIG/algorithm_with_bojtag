@@ -2,7 +2,7 @@
 hld,Heavy-Light 분할,Heavy-Light Decomposition,2024-01-31,CHOYUNSIG
 dijkstra,다익스트라 알고리즘,Dijkstra's Algorithm,2024-01-01,CHOYUNSIG
 trie,트라이,Trie,2024-01-03,CHOYUNSIG
-bellman_ford,벨먼-포드 알고리즘,Bellman-Ford Algorithm,,CHOYUNSIG
+bellman_ford,벨먼-포드 알고리즘,Bellman-Ford Algorithm,2024-01-07,CHOYUNSIG
 floyd_warshall,플로이드-워셜 알고리즘,Floyd-Warshall Algorithm,2024-01-07,CHOYUNSIG
 segtree,세그먼트 트리,Segment Tree,2024-01-11,CHOYUNSIG
 disjoint_set,분리 집합,Disjoint Set,2024-01-13,CHOYUNSIG

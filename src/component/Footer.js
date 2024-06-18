@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { maxContent } from "../constants";
 
 const FooterWrapper = styled.footer`
     padding: 16px;
@@ -11,7 +12,7 @@ const FooterWrapper = styled.footer`
 
 const FooterWidth = styled.div`
     width: 100%;
-    max-width: 1000px;
+    max-width: ${maxContent}px;
 `;
 
 

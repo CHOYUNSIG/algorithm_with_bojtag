@@ -3,6 +3,10 @@ import Post from "./layout/Post";
 import Footer from "./component/Footer";
 import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
+import Home from "./layout/Home";
+import Posts from "./layout/Posts";
+import Tags from "./layout/Tags";
+import NotFound from "./layout/NotFound";
 
 const Root = styled.div`
   display: flex;
@@ -20,10 +24,11 @@ function App() {
       <Header />
       <Container>
         <Routes>
-          <Route path="/" element={null} />
-          <Route path="/post" element={null}>
-            <Route path=":tag" element={<Post />} />
-          </Route>
+          <Route path="/" element={<Home />} />
+          <Route path="/post" element={<Posts />}/>
+          <Route path="/post/:tag" element={<Post />} />
+          <Route path="/tags" element={<Tags />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>
       <Footer />

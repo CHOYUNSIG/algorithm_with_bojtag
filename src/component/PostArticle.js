@@ -7,17 +7,21 @@ import rehypeMathjax from "rehype-mathjax";
 import rehypeSlug from "rehype-slug";
 import styled from "styled-components";
 import "highlight.js/styles/github-dark.css";
+import { onPhone } from "../constants";
 
 const Main = styled.main`
   box-sizing: border-box;
   line-height: 160%;
   flex: 1;
-  padding: 16px;
   text-align: justify;
   min-width: 0px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  h1, h2, h3, h4, p, ol, ul {
+    padding: 0px 32px;
+  }
 
   h1,
   h2 {
@@ -27,6 +31,10 @@ const Main = styled.main`
   h3,
   h4 {
     padding-top: 32px;
+  }
+
+  ol, ul {
+    margin-left: 32px;
   }
 
   blockquote {
@@ -48,9 +56,17 @@ const Main = styled.main`
     max-width: 100%;
     width: -webkit-fill-available;
     border-radius: 16px;
-    margin: 0px 16px;
+    margin: 0px 48px;
     padding: 16px;
     box-shadow: 2px 2px 10px #aaaaaa;
+
+    @media (max-width: ${onPhone}px) {
+      max-width: 100vw !important;
+      width: 100vw;
+      border-radius: 0px;
+      margin: 0px;
+      overflow-x: scroll;
+    }
   }
 
   .mermaid {

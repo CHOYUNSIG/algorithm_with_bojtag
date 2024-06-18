@@ -1,18 +1,17 @@
 import styled from "styled-components";
+import { maxContent } from "../constants";
 
 const BannerWrapper = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  padding: 16px;
-  padding-top: 128px;
-  padding-bottom: 32px;
+  padding: 32px 16px;
   word-break: keep-all;
 `;
 
 const BannerWidth = styled.div`
   width: 100%;
-  max-width: 1000px;
+  max-width: ${maxContent}px;
   padding: 16px;
 `;
 

@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 import useWindowSize from "../hook/useWindowSize";
 import useScrollPosition from "../hook/useScrollPosition";
+import { maxContent } from "../constants"
 
 const HeaderWrapper = styled.header`
   box-sizing: border-box;
@@ -13,7 +14,7 @@ const HeaderWrapper = styled.header`
   z-index: 10;
   transition: 0.3s;
 
-  @media (max-width: 1000px) {
+  @media (max-width: ${maxContent}px) {
     padding: 16px;
   }
 
@@ -33,11 +34,21 @@ const Nav = styled.nav`
   gap: 30px;
 `;
 
-const NoLineA = styled.a`
+const NoLineAnker = styled.a`
   display: flex;
   flex-direction: row;
   align-items: center;
   text-decoration: none;
+  color: black;
+
+  &:hover {
+    text-decoration: underline black;
+  }
+`;
+
+const Padding = styled.div`
+  width: 100vw;
+  height: 72px;
 `;
 
 export default function Header() {
@@ -45,34 +56,37 @@ export default function Header() {
   const { width } = useWindowSize();
 
   return (
-    <HeaderWrapper $top={y === 0}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          flexDirection: "row",
-          gap: "10px",
-        }}
-      >
-        <NoLineA href="/">
-          <img
-            title="APSwBT"
-            src="/img/icons/favicon.ico"
-            width="50px"
-            height="50px"
-            alt="icon"
-          />
-        </NoLineA>
-        <NoLineA href="/">APSwBT</NoLineA>
-      </div>
+    <>
+      <HeaderWrapper $top={y === 0}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            gap: "10px",
+          }}
+        >
+          <NoLineAnker href="/">
+            <img
+              title="APSwBT"
+              src="/img/icons/favicon.ico"
+              width="50px"
+              height="50px"
+              alt="icon"
+            />
+          </NoLineAnker>
+          <NoLineAnker href="/">APSwBT</NoLineAnker>
+        </div>
 
-      {width > 400 ? (
-        <Nav>
-          <NoLineA href="/">HOME</NoLineA>
-          <NoLineA href="/">TAGS</NoLineA>
-          <NoLineA href="/">POSTS</NoLineA>
-        </Nav>
-      ) : null}
-    </HeaderWrapper>
+        {width > 400 ? (
+          <Nav>
+            <NoLineAnker href="/">HOME</NoLineAnker>
+            <NoLineAnker href="/">TAGS</NoLineAnker>
+            <NoLineAnker href="/">POSTS</NoLineAnker>
+          </Nav>
+        ) : null}
+      </HeaderWrapper>
+      <Padding />
+    </>
   );
 }

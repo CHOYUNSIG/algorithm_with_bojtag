@@ -6,6 +6,7 @@ const slugger = new GithubSlugger();
 const SidebarWrapper = styled.nav`
   min-width: 200px;
   height: fit-content;
+  margin: 32px;
   padding: 16px;
   position: sticky;
   top: 128px;

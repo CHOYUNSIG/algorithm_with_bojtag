@@ -8,6 +8,7 @@ import Sidebar from "../component/Sidebar";
 import headerExtractor from "../util/headerExtractor";
 import PostArticle from "../component/PostArticle";
 import mermaid from "mermaid";
+import { maxContent, onPhone } from "../constants";
 
 mermaid.initialize({
   fontFamily: "math",
@@ -15,7 +16,6 @@ mermaid.initialize({
 
 const PostWrapper = styled.section`
   max-width: 100vw;
-  padding: 16px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -24,7 +24,7 @@ const PostWrapper = styled.section`
 const PostWidth = styled.div`
   width: 100%;
   height: auto;
-  max-width: 1000px;
+  max-width: ${maxContent}px;
   display: flex;
   flex-direction: row;
   gap: 16px;
@@ -32,19 +32,21 @@ const PostWidth = styled.div`
 
 export default function Post() {
   const [markdown, setMarkdown] = useState("");
-  const [meta, setMeta] = useState({});
+  const [meta, setMeta] = useState(null);
   const { tag } = useParams();
   const { width } = useWindowSize();
 
   useEffect(() => {
     csvLoader("impl", (impl) => {
-      const md = impl.get(tag)["md"];
-      csvLoader("posts", (posts) => {
-        setMeta(posts.get(md));
-      });
-      fetch("/post/" + md + ".md")
-        .then((response) => response.text())
-        .then((text) => setMarkdown(text));
+      try {
+        const md = impl.get(tag)["md"];
+        csvLoader("posts", (posts) => {
+          setMeta(posts.get(md));
+        });
+        fetch("/post/" + md + ".md")
+          .then((response) => response.text())
+          .then((text) => setMarkdown(text));
+      } catch (e) {}
     });
   }, [tag]);
 
@@ -52,7 +54,7 @@ export default function Post() {
     mermaid.contentLoaded();
   }, [markdown]);
 
-  return (
+  return meta != null ? (
     <>
       <PostBanner
         title={meta.title}
@@ -64,9 +66,20 @@ export default function Post() {
       <PostWrapper>
         <PostWidth>
           <PostArticle markdown={markdown} />
-          {width > 800 ? <Sidebar side={headerExtractor(markdown)} /> : null}
+          {width > onPhone ? <Sidebar side={headerExtractor(markdown)} /> : null}
         </PostWidth>
       </PostWrapper>
     </>
-  );
+  ) : <div style={{
+    width: "100%",
+    height: "100%",
+    boxSizing: "border-box",
+    padding: "32px 16px",
+    textAlign: "center",
+    fontSize: "2em",
+    wordBreak: "keep-all",
+  }}>
+    <i className="fa fa-times"></i>
+    <p>포스트를 찾을 수 없습니다.</p>
+  </div>;
 }
