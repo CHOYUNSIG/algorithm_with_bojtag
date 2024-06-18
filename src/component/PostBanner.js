@@ -7,6 +7,7 @@ const BannerWrapper = styled.section`
   padding: 16px;
   padding-top: 128px;
   padding-bottom: 32px;
+  word-break: keep-all;
 `;
 
 const BannerWidth = styled.div`
