@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import GithubSlugger from "github-slugger";
-
-const slugger = new GithubSlugger();
+import Slugger from "github-slugger";
+import { headerHeight } from "../constants";
 
 const SidebarWrapper = styled.nav`
   min-width: 200px;
@@ -9,7 +8,7 @@ const SidebarWrapper = styled.nav`
   margin: 32px;
   padding: 16px;
   position: sticky;
-  top: 128px;
+  top: ${headerHeight + 32}px;
   border-radius: 16px;
   box-shadow: 2px 2px 10px #aaaaaa;
   display: flex;
@@ -28,28 +27,35 @@ const Anker = styled.a`
 `;
 
 export default function Sidebar({ side }) {
+  const slugger = new Slugger();
+
   return (
     <SidebarWrapper>
-      {side.map(({ depth, header }) => {
-        const slugForm = slugger.slug(header);
-        return (
-          <Anker
-            key={slugForm}
-            $depth={depth}
-            href={"#" + slugForm}
-            onClick={(e) => {
-              e.preventDefault();
-              const targetElement = document.getElementById(slugForm);
-              window.scrollTo({
-                top: targetElement.offsetTop - 100,
-                behavior: "smooth",
-              });
-            }}
-          >
-            {header}
-          </Anker>
-        );
-      })}
+      <div style={{ padding: "8px", fontSize: "1.2em", fontWeight: "bold" }}>
+        Index
+      </div>
+      {
+        side.map(({ depth, header }) => {
+          const slugForm = slugger.slug(header);
+          return (
+            <Anker
+              key={slugForm}
+              $depth={depth}
+              href={"#" + slugForm}
+              onClick={(e) => {
+                e.preventDefault();
+                const targetElement = document.getElementById(slugForm);
+                window.scrollTo({
+                  top: targetElement.offsetTop - 100,
+                  behavior: "smooth",
+                });
+              }}
+            >
+              {header}
+            </Anker>
+          );
+        })
+      }
     </SidebarWrapper>
   );
 }

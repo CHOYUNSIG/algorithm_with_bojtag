@@ -180,7 +180,7 @@ class Tree:
 
 ### 오일러 경로 테크닉
 
-<a href="../../../2024/01/18/euler_tour_technique.html">오일러 경로 테크닉</a>이란 트리의 DFS 방문 순서대로 정점들을 나열하여 트리를 선형적으로 관리하는 기법이다. 오일러 경로 테크닉을 이용한 최소 공통 조상 문제의 풀이는 어떠한 정점 $\text A$와 $\text B$ 사이의 최소 공통 조상은 DFS 방문 순서상 정점 $\text A$와 $\text B$ 사이에서 반드시 재방문하게 됨을 이용한다.
+<a href="/post/euler_tour_technique">오일러 경로 테크닉</a>이란 트리의 DFS 방문 순서대로 정점들을 나열하여 트리를 선형적으로 관리하는 기법이다. 오일러 경로 테크닉을 이용한 최소 공통 조상 문제의 풀이는 어떠한 정점 $\text A$와 $\text B$ 사이의 최소 공통 조상은 DFS 방문 순서상 정점 $\text A$와 $\text B$ 사이에서 반드시 재방문하게 됨을 이용한다.
 
 <img class="post-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Stirling_permutation_Euler_tour.svg/306px-Stirling_permutation_Euler_tour.svg.png" style="background-color: white">
 

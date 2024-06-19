@@ -10,9 +10,7 @@ import PostArticle from "../component/PostArticle";
 import mermaid from "mermaid";
 import { maxContent, onPhone } from "../constants";
 
-mermaid.initialize({
-  fontFamily: "math",
-});
+mermaid.initialize({ fontFamily: "math" });
 
 const PostWrapper = styled.section`
   max-width: 100vw;
@@ -33,6 +31,7 @@ const PostWidth = styled.div`
 export default function Post() {
   const [markdown, setMarkdown] = useState("");
   const [meta, setMeta] = useState(null);
+  const [header, setHeader] = useState([]);
   const { tag } = useParams();
   const { width } = useWindowSize();
 
@@ -52,6 +51,7 @@ export default function Post() {
 
   useEffect(() => {
     mermaid.contentLoaded();
+    setHeader(headerExtractor(markdown));
   }, [markdown]);
 
   return meta != null ? (
@@ -66,7 +66,7 @@ export default function Post() {
       <PostWrapper>
         <PostWidth>
           <PostArticle markdown={markdown} />
-          {width > onPhone ? <Sidebar side={headerExtractor(markdown)} /> : null}
+          {width > onPhone ? <Sidebar side={header} /> : null}
         </PostWidth>
       </PostWrapper>
     </>

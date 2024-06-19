@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import useWindowSize from "../hook/useWindowSize";
 import useScrollPosition from "../hook/useScrollPosition";
-import { maxContent } from "../constants"
+import { headerHeight, maxContent } from "../constants"
 
 const HeaderWrapper = styled.header`
   box-sizing: border-box;
@@ -47,8 +47,8 @@ const NoLineAnker = styled.a`
 `;
 
 const Padding = styled.div`
-  width: 100vw;
-  height: 72px;
+  width: 100%;
+  height: ${headerHeight}px;
 `;
 
 export default function Header() {
