@@ -19,7 +19,13 @@ const Main = styled.main`
   flex-direction: column;
   gap: 10px;
 
-  h1, h2, h3, h4, p, ol, ul {
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  ol,
+  ul {
     padding: 0px 32px;
   }
 
@@ -33,7 +39,8 @@ const Main = styled.main`
     padding-top: 32px;
   }
 
-  ol, ul {
+  ol,
+  ul {
     margin-left: 32px;
   }
 
@@ -57,7 +64,7 @@ const Main = styled.main`
     width: -webkit-fill-available;
     border-radius: 16px;
     margin: 0px 48px;
-    padding: 16px;
+    padding: 32px;
     box-shadow: 2px 2px 10px #aaaaaa;
 
     @media (max-width: ${onPhone}px) {
@@ -66,6 +73,32 @@ const Main = styled.main`
       border-radius: 0px;
       margin: 0px;
       overflow-x: scroll;
+    }
+  }
+
+  pre > code {
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #555566;
+
+      &:hover {
+        background-color: #ff7b72;
+      }
+    }
+
+    &::-webkit-scrollbar-button {
+      display: none;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 5px;
     }
   }
 

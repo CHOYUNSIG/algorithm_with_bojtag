@@ -7,6 +7,7 @@ import Home from "./layout/Home";
 import Posts from "./layout/Posts";
 import Tags from "./layout/Tags";
 import NotFound from "./layout/NotFound";
+import "./App.css"
 
 const Root = styled.div`
   display: flex;

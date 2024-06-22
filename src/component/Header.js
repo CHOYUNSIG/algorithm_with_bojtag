@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 import useWindowSize from "../hook/useWindowSize";
 import useScrollPosition from "../hook/useScrollPosition";
 import { headerHeight, maxContent } from "../constants"
+import { Link } from "react-router-dom";
 
 const HeaderWrapper = styled.header`
   box-sizing: border-box;
@@ -34,7 +35,7 @@ const Nav = styled.nav`
   gap: 30px;
 `;
 
-const NoLineAnker = styled.a`
+const NoLineLink = styled(Link)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -44,12 +45,7 @@ const NoLineAnker = styled.a`
   &:hover {
     text-decoration: underline black;
   }
-`;
-
-const Padding = styled.div`
-  width: 100%;
-  height: ${headerHeight}px;
-`;
+`
 
 export default function Header() {
   const { y } = useScrollPosition();
@@ -66,7 +62,7 @@ export default function Header() {
             gap: "10px",
           }}
         >
-          <NoLineAnker href="/">
+          <NoLineLink to="/">
             <img
               title="APSwBT"
               src="/img/icons/favicon.ico"
@@ -74,19 +70,22 @@ export default function Header() {
               height="50px"
               alt="icon"
             />
-          </NoLineAnker>
-          <NoLineAnker href="/">APSwBT</NoLineAnker>
+          </NoLineLink>
+          <NoLineLink to="/">APSwBT</NoLineLink>
         </div>
 
         {width > 400 ? (
           <Nav>
-            <NoLineAnker href="/">HOME</NoLineAnker>
-            <NoLineAnker href="/">TAGS</NoLineAnker>
-            <NoLineAnker href="/">POSTS</NoLineAnker>
+            <NoLineLink to="/">HOME</NoLineLink>
+            <NoLineLink to="/tags">TAGS</NoLineLink>
+            <NoLineLink to="/post">POSTS</NoLineLink>
           </Nav>
         ) : null}
       </HeaderWrapper>
-      <Padding />
+      <div style={{
+        width: "100%",
+        height: headerHeight + "px",
+      }}/>
     </>
   );
 }
