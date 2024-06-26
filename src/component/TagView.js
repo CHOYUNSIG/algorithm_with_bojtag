@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import mermaid from "mermaid";
 import { useNavigate } from "react-router-dom";
+import { onPhone } from "../constants";
 
 const TagViewContainer = styled.div`
   width: 100%;
@@ -10,11 +11,33 @@ const TagViewContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
+
+  @media (max-width: ${onPhone}px) {
+    padding: 16px 0px;
+  }
 `;
 
 const TagViewWidth = styled.div`
   max-width: 100%;
-`
+`;
+
+const MermaidPre = styled.pre`
+  max-width: 100%;
+  max-height: 50vh;
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: inset 2px 2px 10px #aaaaaa;
+  text-align: center;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+
+  @media (max-width: ${onPhone}px) {
+    //width: 100%;
+    border-radius: 0px;
+  }
+`;
 
 const badge = `<span style="background-color: red; border-radius: 50%; display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;"><i class="fa fa-code"></i></span>`;
 
@@ -45,7 +68,7 @@ const filter = `
     </defs>
 `;
 
-export default function TagView({ tags, related, impl }) {
+export default function TagView({ title, tags, related, impl }) {
   const navigate = useNavigate();
   const id = `mermaid-tag-${Math.random().toString().slice(2)}`;
 
@@ -124,20 +147,68 @@ export default function TagView({ tags, related, impl }) {
     });
   }, [id, navigate, postSet, tags, related]);
 
+  const preRef = useRef(null);
+  let isDragStarted = false;
+  let isDragging = false;
+  let startPos = { x: 0, y: 0 };
+  let scrollPos = { left: 0, top: 0 };
+
+  const onDragStart = (e) => {
+    preRef.current.scrollLeft = scrollPos.left;
+    preRef.current.scrollTop = scrollPos.top;
+    startPos.x = e.pageX || e.touches[0].pageX;
+    startPos.y = e.pageY || e.touches[0].pageY;
+    isDragStarted = true;
+  };
+
+  const onDrag = (e) => {
+    if (!isDragStarted) return;
+    isDragging = true;
+    const pageX = e.pageX || e.touches[0].pageX;
+    const pageY = e.pageY || e.touches[0].pageY;
+    preRef.current.scrollLeft = scrollPos.left - (pageX - startPos.x);
+    preRef.current.scrollTop = scrollPos.top - (pageY - startPos.y);
+  };
+
+  const onDragEnd = (e) => {
+    scrollPos.left = preRef.current.scrollLeft;
+    scrollPos.top = preRef.current.scrollTop;
+    if (isDragging)
+      e.preventDefault();
+    isDragStarted = false;
+    isDragging = false;
+  };
+
   return (
     <TagViewContainer>
       <TagViewWidth>
-        <h2>태그</h2>
-        <pre
+        <h2 style={{padding: "0px 32px"}}>{title}</h2>
+        <MermaidPre
           id={id}
-          style={{
-            maxWidth: "100%",
-            maxHeight: "50vh",
-            padding: "16px",
-            borderRadius: "16px",
-            boxShadow: "inset 2px 2px 10px #aaaaaa",
-            textAlign: "center",
-            overflow: "hidden",
+          ref={preRef}
+          onTouchStart={(e) => {
+            onDragStart(e);
+          }}
+          onMouseDown={(e) => {
+            onDragStart(e);
+          }}
+          onTouchMove={(e) => {
+            onDrag(e);
+          }}
+          onMouseMove={(e) => {
+            onDrag(e);
+          }}
+          onMouseUp={(e) => {
+            onDragEnd(e);
+          }}
+          onTouchEnd={(e) => {
+            onDragEnd(e);
+          }}
+          onMouseLeave={(e) => {
+            onDragEnd(e);
+          }}
+          onTouchCancel={(e) => {
+            onDragEnd(e);
           }}
         />
       </TagViewWidth>

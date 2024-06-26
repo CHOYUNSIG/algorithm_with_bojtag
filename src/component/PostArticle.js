@@ -73,8 +73,8 @@ const Main = styled.main`
     box-shadow: 2px 2px 10px #aaaaaa;
 
     @media (max-width: ${onPhone}px) {
-      max-width: 100vw !important;
-      width: 100vw;
+      width: 100%;
+      max-width: 100% !important;
       border-radius: 0px;
       margin: 0px;
       overflow-x: scroll;
@@ -108,7 +108,7 @@ const Main = styled.main`
   }
 
   .mermaid {
-    max-width: 100vw;
+    max-width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -116,6 +116,14 @@ const Main = styled.main`
     p, div, span {
       padding: 0px;
       margin: 0px;
+    }
+  }
+
+  & > mjx-container {
+    padding: 16px;
+    
+    & > svg {
+      max-width: 100%;
     }
   }
 
@@ -132,6 +140,7 @@ const Main = styled.main`
 
   table {
     margin: 32px auto;
+    overflow-x: scroll;
   }
 `;
 

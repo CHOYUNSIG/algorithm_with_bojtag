@@ -13,7 +13,7 @@ import lookup from "../util/lookup";
 import TagView from "../component/TagView";
 
 const PostWrapper = styled.section`
-  max-width: 100vw;
+  max-width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -121,6 +121,7 @@ export default function Post() {
       ) : null}
       {nowPost && prvPosts && nxtPosts && tables.related && tables.impl ? (
         <TagView
+          title="관련 태그"
           tags={[...prvPosts, nowPost, ...nxtPosts]}
           related={tables.related}
           impl={tables.impl}

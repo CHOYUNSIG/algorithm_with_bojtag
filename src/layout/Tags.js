@@ -3,14 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTable } from "../redux/action/csvAction";
 
 export default function Tags() {
-    const dispatch = useDispatch();
-    const tables = useSelector((state) => state.csv);
+  const dispatch = useDispatch();
+  const tables = useSelector((state) => state.csv);
 
-    useEffect(() => {
-        dispatch(fetchTable());
-    }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchTable());
+  }, [dispatch]);
 
-    console.log(tables);
-
-    return <div></div>;
+  return <div></div>;
 }
