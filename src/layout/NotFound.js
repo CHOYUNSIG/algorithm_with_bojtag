@@ -1,9 +1,17 @@
 export default function NotFound() {
-    return <div style={{
+  return (
+    <div
+      style={{
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
-    }}>
-        <p>데이터가 없습니다.</p>
-    </div>;
+      }}
+    >
+      <div style={{ textAlign: "center" }}>
+        <h1 style={{ fontSize: "5em" }}>404</h1>
+        <br />
+        <p>페이지가 없습니다.</p>
+      </div>
+    </div>
+  );
 }

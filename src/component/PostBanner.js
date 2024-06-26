@@ -32,7 +32,13 @@ const PostTag = styled(PostMeta)`
   padding: 10px 0px;
 `;
 
-export default function PostBanner({ title, subtitle, date, writer, tag_list }) {
+export default function PostBanner({
+  title,
+  subtitle,
+  date,
+  writer,
+  tag_list,
+}) {
   return (
     <BannerWrapper>
       <BannerWidth>
@@ -40,14 +46,18 @@ export default function PostBanner({ title, subtitle, date, writer, tag_list }) 
         <h2 style={{ fontWeight: "lighter" }}>{subtitle}</h2>
 
         <PostMeta>
-          <IconSpan>
-            <i className="fa fa-calendar"></i>
-            <span>{date}</span>
-          </IconSpan>
-          <IconSpan>
-            <i className="fa fa-pen"></i>
-            <span>{writer}</span>
-          </IconSpan>
+          {date ? (
+            <IconSpan>
+              <i className="fa fa-calendar"></i>
+              <span>{date}</span>
+            </IconSpan>
+          ) : null}
+          {writer ? (
+            <IconSpan>
+              <i className="fa fa-pen"></i>
+              <span>{writer}</span>
+            </IconSpan>
+          ) : null}
         </PostMeta>
 
         <PostTag>

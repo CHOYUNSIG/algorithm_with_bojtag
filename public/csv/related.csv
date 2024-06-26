@@ -19,9 +19,6 @@ hashing,hash_set
 sorting,binary_search
 binary_search,parametric_search
 parametric_search,pbs
-trees,tree_set
-trees,priority_queue
-trees,segtree
 trees,disjoint_set
 trees,euler_tour_technique
 trees,centroid

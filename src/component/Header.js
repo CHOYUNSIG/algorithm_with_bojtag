@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import useWindowSize from "../hook/useWindowSize";
 import useScrollPosition from "../hook/useScrollPosition";
-import { headerHeight, maxContent } from "../constants"
+import { headerHeight, maxContent } from "../constants";
 import { Link } from "react-router-dom";
 
 const HeaderWrapper = styled.header`
@@ -45,14 +45,14 @@ const NoLineLink = styled(Link)`
   &:hover {
     text-decoration: underline black;
   }
-`
+`;
 
 export default function Header() {
   const { y } = useScrollPosition();
   const { width } = useWindowSize();
 
   return (
-    <>
+    <div>
       <HeaderWrapper $top={y === 0}>
         <div
           style={{
@@ -74,18 +74,18 @@ export default function Header() {
           <NoLineLink to="/">APSwBT</NoLineLink>
         </div>
 
-        {width > 400 ? (
-          <Nav>
-            <NoLineLink to="/">HOME</NoLineLink>
-            <NoLineLink to="/tags">TAGS</NoLineLink>
-            <NoLineLink to="/post">POSTS</NoLineLink>
-          </Nav>
-        ) : null}
+        <Nav>
+          {width > 400 ? <NoLineLink to="/">HOME</NoLineLink> : null}
+          <NoLineLink to="/tags">TAGS</NoLineLink>
+          <NoLineLink to="/post">POSTS</NoLineLink>
+        </Nav>
       </HeaderWrapper>
-      <div style={{
-        width: "100%",
-        height: headerHeight + "px",
-      }}/>
-    </>
+      <div
+        style={{
+          width: "100%",
+          height: headerHeight + "px",
+        }}
+      />
+    </div>
   );
 }

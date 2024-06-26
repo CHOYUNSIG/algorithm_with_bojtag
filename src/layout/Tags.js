@@ -1,18 +1,16 @@
-import { useEffect, useState } from "react";
-import csvLoader from "../util/csvLoader";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTable } from "../redux/action/csvAction";
 
 export default function Tags() {
-    const [tags, setTags] = useState(null);
-    const [related, setRelated] = useState(null);
-    const [group, setGroup] = useState(null);
-    const [impl, setImpl] = useState(null);
+    const dispatch = useDispatch();
+    const tables = useSelector((state) => state.csv);
 
     useEffect(() => {
-        csvLoader("tags", (table) => setTags(table));
-        csvLoader("related", (table) => setRelated(table), true);
-        csvLoader("group", (table) => setGroup(table), true);
-        csvLoader("impl", (table) => setImpl(table));
-    }, []);
+        dispatch(fetchTable());
+    }, [dispatch]);
 
-    return <></>;
+    console.log(tables);
+
+    return <div></div>;
 }

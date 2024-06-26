@@ -1,16 +1,16 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import useWindowSize from "../hook/useWindowSize";
-import csvLoader from "../util/csvLoader";
 import PostBanner from "../component/PostBanner";
 import Sidebar from "../component/Sidebar";
 import headerExtractor from "../util/headerExtractor";
 import PostArticle from "../component/PostArticle";
-import mermaid from "mermaid";
 import { maxContent, onPhone } from "../constants";
-
-mermaid.initialize({ fontFamily: "math" });
+import { fetchTable } from "../redux/action/csvAction";
+import lookup from "../util/lookup";
+import TagView from "../component/TagView";
 
 const PostWrapper = styled.section`
   max-width: 100vw;
@@ -29,57 +29,126 @@ const PostWidth = styled.div`
 `;
 
 export default function Post() {
-  const [markdown, setMarkdown] = useState("");
+  const dispatch = useDispatch();
+  const tables = useSelector((state) => state.csv);
+
+  const [markdown, setMarkdown] = useState(null);
   const [meta, setMeta] = useState(null);
-  const [header, setHeader] = useState([]);
+  const [header, setHeader] = useState(null);
+  const [nowPost, setNowPost] = useState(null);
+  const [prvPosts, setPrvPosts] = useState(null);
+  const [nxtPosts, setNxtPosts] = useState(null);
+
   const { tag } = useParams();
   const { width } = useWindowSize();
 
   useEffect(() => {
-    csvLoader("impl", (impl) => {
-      try {
-        const md = impl.get(tag)["md"];
-        csvLoader("posts", (posts) => {
-          setMeta(posts.get(md));
-        });
-        fetch("/post/" + md + ".md")
-          .then((response) => response.text())
-          .then((text) => setMarkdown(text));
-      } catch (e) {}
-    });
-  }, [tag]);
+    dispatch(fetchTable());
+  }, [dispatch]);
 
   useEffect(() => {
-    mermaid.contentLoaded();
-    setHeader(headerExtractor(markdown));
+    window.scrollTo(0, 0);
+  }, [tag]);
+
+  // 포스트의 메타 데이터와 내용 로드
+  useEffect(() => {
+    const impl = tables.impl;
+    const posts = tables.posts;
+    const tags = tables.tags;
+    if (!impl || !posts || !tags) return;
+    try {
+      const t = lookup(tags, "tag", tag, ["tag", "exp", "tier"])[0];
+      const md = lookup(impl, "tag", tag, "md")[0].md;
+      const meta = lookup(posts, "md", md, [
+        "title",
+        "subtitle",
+        "date",
+        "writer",
+      ])[0];
+
+      fetch("/post/" + md + ".md")
+        .then((response) => response.text())
+        .then((text) => {
+          setMarkdown(text);
+          setMeta(meta);
+          setNowPost(t);
+        });
+    } catch (e) {}
+  }, [tag, tables]);
+
+  // 관련 태그 정보 로드
+  useEffect(() => {
+    const related = tables.related;
+    const tags = tables.tags;
+    if (!related || !tags) return;
+    try {
+      const prv = lookup(related, "next", tag, "tag").map((row) => {
+        return row.tag;
+      });
+      const nxt = lookup(related, "tag", tag, "next").map((row) => {
+        return row.next;
+      });
+
+      for (const [tagList, setPosts] of [
+        [prv, setPrvPosts],
+        [nxt, setNxtPosts],
+      ]) {
+        let posts = [];
+        for (const t of tagList) {
+          const tagInfo = lookup(tags, "tag", t, ["tag", "exp", "tier"])[0];
+          posts.push(tagInfo);
+        }
+        setPosts(posts);
+      }
+    } catch (e) {}
+  }, [tag, tables]);
+
+  // 포스트의 내용이 로드되었을 때
+  useEffect(() => {
+    if (markdown) setHeader(headerExtractor(markdown));
   }, [markdown]);
 
-  return meta != null ? (
-    <>
-      <PostBanner
-        title={meta.title}
-        subtitle={meta.subtitle}
-        date={meta.date}
-        writer={meta.writer}
-        tag_list={["tag1", "tag2"]}
-      />
-      <PostWrapper>
-        <PostWidth>
-          <PostArticle markdown={markdown} />
-          {width > onPhone ? <Sidebar side={header} /> : null}
-        </PostWidth>
-      </PostWrapper>
-    </>
-  ) : <div style={{
-    width: "100%",
-    height: "100%",
-    boxSizing: "border-box",
-    padding: "32px 16px",
-    textAlign: "center",
-    fontSize: "2em",
-    wordBreak: "keep-all",
-  }}>
-    <i className="fa fa-times"></i>
-    <p>포스트를 찾을 수 없습니다.</p>
-  </div>;
+  return markdown ? (
+    <div>
+      {meta ? (
+        <PostBanner
+          title={meta.title}
+          subtitle={meta.subtitle}
+          date={meta.date}
+          writer={meta.writer}
+          tag_list={[]}
+        />
+      ) : null}
+      {nowPost && prvPosts && nxtPosts && tables.related && tables.impl ? (
+        <TagView
+          tags={[...prvPosts, nowPost, ...nxtPosts]}
+          related={tables.related}
+          impl={tables.impl}
+        />
+      ) : null}
+      {markdown ? (
+        <PostWrapper>
+          <PostWidth>
+            <PostArticle markdown={markdown} />
+            {width > onPhone && header ? <Sidebar side={header} /> : null}
+          </PostWidth>
+        </PostWrapper>
+      ) : null}
+    </div>
+  ) : (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        boxSizing: "border-box",
+        padding: "32px 16px",
+        textAlign: "center",
+        fontSize: "2em",
+        wordBreak: "keep-all",
+      }}
+    >
+      <i className="fa fa-times"></i>
+      <p>포스트를 찾을 수 없습니다.</p>
+    </div>
+  );
 }

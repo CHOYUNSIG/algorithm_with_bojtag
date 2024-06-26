@@ -7,7 +7,12 @@ import rehypeMathjax from "rehype-mathjax";
 import rehypeSlug from "rehype-slug";
 import styled from "styled-components";
 import "highlight.js/styles/github-dark.css";
+import { useEffect, useState } from "react";
+import mermaid from "mermaid";
 import { onPhone } from "../constants";
+import { Link } from "react-router-dom";
+import ReactDOMServer from "react-dom/server";
+import parse from "html-react-parser";
 
 const Main = styled.main`
   box-sizing: border-box;
@@ -107,6 +112,11 @@ const Main = styled.main`
     display: flex;
     flex-direction: row;
     justify-content: center;
+
+    p, div, span {
+      padding: 0px;
+      margin: 0px;
+    }
   }
 
   table,
@@ -125,22 +135,104 @@ const Main = styled.main`
   }
 `;
 
+function decodeHTMLEntities(text) {
+  const entities = {
+    "&quot;": '"',
+    "&amp;": "&",
+    "&lt;": "<",
+    "&gt;": ">",
+    "&nbsp;": " ",
+    // 필요한 다른 엔티티들을 여기에 추가할 수 있습니다.
+  };
+
+  return text.replace(/&[^;]+;/g, (match) => entities[match] || match);
+}
+
 export default function PostArticle({ markdown }) {
-  return (
-    <Main>
-      {
-        <ReactMarkdown
-          remarkPlugins={[remarkMath, remarkGfm]}
-          rehypePlugins={[
-            rehypeHighlight,
-            rehypeRaw,
-            rehypeMathjax,
-            rehypeSlug,
-          ]}
-        >
-          {markdown}
-        </ReactMarkdown>
-      }
-    </Main>
-  );
+  const [svgs, setSvgs] = useState(null);
+  const [marked, setMarked] = useState(null);
+
+  // 1차 (태그를 전부 확인해 SVG를 비동기 로드)
+  useEffect(() => {
+    const matches = markdown.match(/class="mermaid"/g).length;
+    const total = matches ? matches.length : 0;
+    const newSvgs = Array(total).fill(null);
+    let i = 0;
+
+    setMarked(
+      <ReactMarkdown
+        components={{
+          a(props) {
+            const { href, ...rest } = props;
+            return <Link to={href} {...rest} />;
+          },
+
+          pre(props) {
+            const { className, children } = props;
+            if (className === "mermaid") {
+              const index = i++;
+
+              const text = decodeHTMLEntities(
+                typeof children === "string"
+                  ? children
+                  : children
+                      .map((a) => ReactDOMServer.renderToStaticMarkup(a))
+                      .join("")
+              );
+
+              mermaid.render(`mermaid-render-${index}`, text).then(({ svg }) => {
+                newSvgs[index] = svg;
+                if (!newSvgs.includes(null)) setSvgs(newSvgs);
+              });
+
+              return (
+                <pre
+                  {...props}
+                  children={<div>wait for diagram rendering...</div>}
+                />
+              );
+            } else return <pre {...props} />;
+          },
+        }}
+        remarkPlugins={[remarkMath, remarkGfm]}
+        rehypePlugins={[rehypeHighlight, rehypeMathjax, rehypeSlug, rehypeRaw]}
+      >
+        {markdown}
+      </ReactMarkdown>
+    );
+  }, [markdown]);
+
+  // 2차 (로드된 SVG 태그를 반영)
+  useEffect(() => {
+    if (!svgs) return;
+
+    let i = 0;
+
+    setMarked(
+      <ReactMarkdown
+        components={{
+          a(props) {
+            const { href, ...rest } = props;
+            return <Link to={href} {...rest} />;
+          },
+
+          pre(props) {
+            const { className } = props;
+            if (className === "mermaid") {
+              const svg = svgs[i++];
+              return <pre {...props}>{svg ? parse(svg) : <div>failed to render.</div>}</pre>;
+            } else return <pre {...props} />;
+          },
+        }}
+        remarkPlugins={[remarkMath, remarkGfm]}
+        rehypePlugins={[rehypeHighlight, rehypeMathjax, rehypeSlug, rehypeRaw]}
+      >
+        {markdown}
+      </ReactMarkdown>
+    );
+
+    setSvgs(null);
+  }, [svgs, markdown]);
+
+  return <Main>{marked}</Main>;
 }
