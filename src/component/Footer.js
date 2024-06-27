@@ -8,19 +8,19 @@ const FooterWrapper = styled.footer`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-`;
 
-const FooterWidth = styled.div`
-  width: 100%;
-  max-width: ${maxContent}px;
+  & > div {
+    width: 100%;
+    max-width: ${maxContent}px;
+  }
 `;
 
 export default function Footer() {
   return (
     <FooterWrapper>
-      <FooterWidth>
+      <div>
         Powered by <a href="https://github.com/CHOYUNSIG">CHOYUNSIG</a>
-      </FooterWidth>
+      </div>
     </FooterWrapper>
   );
 }

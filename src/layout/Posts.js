@@ -6,15 +6,21 @@ import styled from "styled-components";
 import { maxContent } from "../constants";
 
 const CardWrapper = styled.div`
-  max-width: ${maxContent}px;
-  box-sizing: border-box;
-  width: 100%;
-  padding: 16px;
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+
+  & > div {
+    max-width: ${maxContent}px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 16px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
 `;
 
 export default function Posts() {
@@ -49,5 +55,5 @@ export default function Posts() {
     );
   }, [tables]);
 
-  return <CardWrapper>{cards}</CardWrapper>;
+  return <CardWrapper><div>{cards}</div></CardWrapper>;
 }

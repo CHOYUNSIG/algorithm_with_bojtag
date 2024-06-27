@@ -7,12 +7,12 @@ const BannerWrapper = styled.section`
   justify-content: center;
   padding: 32px 16px;
   word-break: keep-all;
-`;
 
-const BannerWidth = styled.div`
-  width: 100%;
-  max-width: ${maxContent}px;
-  padding: 16px;
+  & > div {
+    width: 100%;
+    max-width: ${maxContent}px;
+    padding: 16px;
+  }
 `;
 
 const PostMeta = styled.div`
@@ -36,7 +36,7 @@ export default function PostBanner({
 }) {
   return (
     <BannerWrapper>
-      <BannerWidth>
+      <div>
         <h1 style={{ fontSize: "40px", margin: "10px 0px" }}>{title}</h1>
         <h2 style={{ fontWeight: "lighter" }}>{subtitle}</h2>
 
@@ -54,7 +54,7 @@ export default function PostBanner({
             </IconSpan>
           ) : null}
         </PostMeta>
-      </BannerWidth>
+      </div>
     </BannerWrapper>
   );
 }

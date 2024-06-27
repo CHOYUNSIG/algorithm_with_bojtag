@@ -16,11 +16,11 @@ const TagViewContainer = styled.div`
     padding: 16px 0px;
     display: block;
   }
-`;
 
-const TagViewWidth = styled.div`
-  max-width: ${maxContent}px;
-  width: 100%;
+  & > div {
+    max-width: ${maxContent}px;
+    width: 100%;
+  }
 `;
 
 const MermaidPre = styled.pre`
@@ -183,7 +183,7 @@ export default function TagView({ title, tags, related, impl }) {
 
   return (
     <TagViewContainer>
-      <TagViewWidth>
+      <div>
         <h2 style={{ padding: "0px 32px" }}>{title}</h2>
         <MermaidPre
           id={id}
@@ -213,7 +213,7 @@ export default function TagView({ title, tags, related, impl }) {
             onDragEnd(e);
           }}
         />
-      </TagViewWidth>
+      </div>
     </TagViewContainer>
   );
 }

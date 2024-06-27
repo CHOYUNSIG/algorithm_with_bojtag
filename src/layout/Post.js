@@ -17,15 +17,15 @@ const PostWrapper = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: center;
-`;
 
-const PostWidth = styled.div`
-  width: 100%;
-  height: auto;
-  max-width: ${maxContent}px;
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
+  & > div {
+    width: 100%;
+    height: auto;
+    max-width: ${maxContent}px;
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+  }
 `;
 
 export default function Post() {
@@ -129,10 +129,10 @@ export default function Post() {
       ) : null}
       {markdown ? (
         <PostWrapper>
-          <PostWidth>
+          <div>
             <PostArticle markdown={markdown} />
             {width > onPhone && header ? <Sidebar side={header} /> : null}
-          </PostWidth>
+          </div>
         </PostWrapper>
       ) : null}
     </div>

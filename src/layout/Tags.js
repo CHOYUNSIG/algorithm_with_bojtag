@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { fetchTable } from "../redux/action/csvAction";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { brandColor } from "../constants";
+import { brandColor, maxContent } from "../constants";
 
 const ButtonWrapper = styled.div`
   padding: 8px;
@@ -27,6 +27,26 @@ const Button = styled.button`
   &.selected {
     color: white;
     background-color: #${brandColor};
+  }
+`;
+
+const PreviewWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  & > div {
+    max-width: ${maxContent}px;
+    width: 100%;
+    border: dotted 3px #aaaaaa;
+    border-radius: 16px;
+    margin: 16px;
+    height: 50vh;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0.8;
   }
 `;
 
@@ -73,27 +93,17 @@ export default function Tags() {
         })}
       </ButtonWrapper>
       {selected === null ? (
-        <div
-          style={{
-            border: "dotted 3px #aaaaaa",
-            borderRadius: "16px",
-            margin: "16px",
-            height: "50vh",
-            textAlign: "center",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            opacity: "0.8",
-          }}
-        >
-          <i
-            className="fa fa-arrow-up"
-            style={{
-              padding: "16px",
-            }}
-          ></i>
-          카테고리를 선택하세요.
-        </div>
+        <PreviewWrapper>
+          <div>
+            <i
+              className="fa fa-arrow-up"
+              style={{
+                padding: "16px",
+              }}
+            ></i>
+            카테고리를 선택하세요.
+          </div>
+        </PreviewWrapper>
       ) : (
         <Outlet />
       )}
