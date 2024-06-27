@@ -154,6 +154,7 @@
 정수론,flt
 정수론,pollard_rho
 정수론,extended_euclidean
+정수론,floor_sum
 기하학,geometry_3d
 기하학,geometry_hyper
 기하학,coordinate_compression
