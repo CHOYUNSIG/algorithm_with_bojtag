@@ -28,16 +28,11 @@ const IconSpan = styled.span`
   gap: 5px;
 `;
 
-const PostTag = styled(PostMeta)`
-  padding: 10px 0px;
-`;
-
 export default function PostBanner({
   title,
   subtitle,
   date,
   writer,
-  tag_list,
 }) {
   return (
     <BannerWrapper>
@@ -59,16 +54,6 @@ export default function PostBanner({
             </IconSpan>
           ) : null}
         </PostMeta>
-
-        <PostTag>
-          {tag_list.map((tag) => {
-            return (
-              <a key={tag} href="/">
-                {"#" + tag}
-              </a>
-            );
-          })}
-        </PostTag>
       </BannerWidth>
     </BannerWrapper>
   );

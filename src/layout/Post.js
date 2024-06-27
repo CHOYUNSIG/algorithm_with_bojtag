@@ -38,6 +38,7 @@ export default function Post() {
   const [nowPost, setNowPost] = useState(null);
   const [prvPosts, setPrvPosts] = useState(null);
   const [nxtPosts, setNxtPosts] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { tag } = useParams();
   const { width } = useWindowSize();
@@ -52,9 +53,7 @@ export default function Post() {
 
   // 포스트의 메타 데이터와 내용 로드
   useEffect(() => {
-    const impl = tables.impl;
-    const posts = tables.posts;
-    const tags = tables.tags;
+    const { impl, posts, tags } = tables;
     if (!impl || !posts || !tags) return;
     try {
       const t = lookup(tags, "tag", tag, ["tag", "exp", "tier"])[0];
@@ -73,13 +72,15 @@ export default function Post() {
           setMeta(meta);
           setNowPost(t);
         });
-    } catch (e) {}
+    } catch (e) {
+    } finally {
+      setIsLoading(false);
+    }
   }, [tag, tables]);
 
   // 관련 태그 정보 로드
   useEffect(() => {
-    const related = tables.related;
-    const tags = tables.tags;
+    const { related, tags } = tables;
     if (!related || !tags) return;
     try {
       const prv = lookup(related, "next", tag, "tag").map((row) => {
@@ -116,7 +117,6 @@ export default function Post() {
           subtitle={meta.subtitle}
           date={meta.date}
           writer={meta.writer}
-          tag_list={[]}
         />
       ) : null}
       {nowPost && prvPosts && nxtPosts && tables.related && tables.impl ? (
@@ -148,8 +148,17 @@ export default function Post() {
         wordBreak: "keep-all",
       }}
     >
-      <i className="fa fa-times"></i>
-      <p>포스트를 찾을 수 없습니다.</p>
+      {isLoading ? (
+        <>
+          <i className="fa fa-spinner"></i>
+          <p>로딩 중...</p>
+        </>
+      ) : (
+        <>
+          <i className="fa fa-times"></i>
+          <p>포스트를 찾을 수 없습니다.</p>
+        </>
+      )}
     </div>
   );
 }

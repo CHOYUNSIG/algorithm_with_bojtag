@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useEffect, useRef, useState } from "react";
 import mermaid from "mermaid";
 import { useNavigate } from "react-router-dom";
-import { onPhone } from "../constants";
+import { maxContent, onPhone } from "../constants";
 
 const TagViewContainer = styled.div`
   width: 100%;
@@ -14,11 +14,12 @@ const TagViewContainer = styled.div`
 
   @media (max-width: ${onPhone}px) {
     padding: 16px 0px;
+    display: block;
   }
 `;
 
 const TagViewWidth = styled.div`
-  max-width: 100%;
+  max-width: ${maxContent}px;
 `;
 
 const MermaidPre = styled.pre`
@@ -34,7 +35,6 @@ const MermaidPre = styled.pre`
   cursor: grab;
 
   @media (max-width: ${onPhone}px) {
-    //width: 100%;
     border-radius: 0px;
   }
 `;
