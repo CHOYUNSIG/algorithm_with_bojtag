@@ -20,6 +20,7 @@ const TagViewContainer = styled.div`
 
 const TagViewWidth = styled.div`
   max-width: ${maxContent}px;
+  width: 100%;
 `;
 
 const MermaidPre = styled.pre`
@@ -42,30 +43,30 @@ const MermaidPre = styled.pre`
 const badge = `<span style="background-color: red; border-radius: 50%; display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;"><i class="fa fa-code"></i></span>`;
 
 const tierColor = `
-    classDef tier0 fill:#ad5600, color:#fff, stroke:#0000
-    classDef tier1 fill:#435f7a, color:#fff, stroke:#0000
-    classDef tier2 fill:#ec9a00, color:#fff, stroke:#0000
-    classDef tier3 fill:#27e2a4, color:#fff, stroke:#0000
-    classDef tier4 fill:#00b4fc, color:#fff, stroke:#0000
-    classDef tier5 fill:#ff0062, color:#fff, stroke:#0000
+classDef tier0 fill:#ad5600, color:#fff, stroke:#0000
+classDef tier1 fill:#435f7a, color:#fff, stroke:#0000
+classDef tier2 fill:#ec9a00, color:#fff, stroke:#0000
+classDef tier3 fill:#27e2a4, color:#fff, stroke:#0000
+classDef tier4 fill:#00b4fc, color:#fff, stroke:#0000
+classDef tier5 fill:#ff0062, color:#fff, stroke:#0000
 `;
 
 const filter = `
-    <defs>
-        <filter id="drop-shadow" x="-100%" y="-100%" width="300%" height="300%">
-            <feFlood flood-color="black" result="color"/>
-            <feComposite in2="SourceGraphic" in="color" operator="in"/>
-            <feGaussianBlur stdDeviation="3"/>
-            <feComponentTransfer>
-                <feFuncA type="linear" slope="0.5"/>
-            </feComponentTransfer>
-            <feOffset dx="1" dy="2"/>
-            <feMerge>
-                <feMergeNode />
-                <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-        </filter>
-    </defs>
+<defs>
+  <filter id="drop-shadow" x="-100%" y="-100%" width="300%" height="300%">
+    <feFlood flood-color="black" result="color"/>
+    <feComposite in2="SourceGraphic" in="color" operator="in"/>
+    <feGaussianBlur stdDeviation="3"/>
+    <feComponentTransfer>
+      <feFuncA type="linear" slope="0.5"/>
+    </feComponentTransfer>
+    <feOffset dx="1" dy="2"/>
+    <feMerge>
+      <feMergeNode />
+      <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
+</defs>
 `;
 
 export default function TagView({ title, tags, related, impl }) {
@@ -102,7 +103,7 @@ export default function TagView({ title, tags, related, impl }) {
 
     const graph = "graph LR\n" + main + def + tierColor;
 
-    mermaid.render("mermaid-tag", graph).then(({ bindFunctions, svg }) => {
+    mermaid.render(id + "-svg", graph).then(({ bindFunctions, svg }) => {
       const pre = document.getElementById(id);
       if (!pre) return;
       pre.innerHTML = svg;
@@ -110,19 +111,21 @@ export default function TagView({ title, tags, related, impl }) {
 
       const current = pre.firstChild;
 
-      const style = new Map(
-        current
-          .getAttribute("style")
+      // 크기 조정
+      const style = current.getAttribute("style");
+      const styleMap = new Map(
+        style
           .trim()
           .split(";")
           .map((style) => style.split(":").map((text) => text.trim()))
       );
-      const maxWidth = style.get("max-width");
+      const maxWidth = styleMap.get("max-width");
       current.setAttribute(
         "width",
         `${Number(maxWidth.substring(0, maxWidth.length - 2)) * 0.8}px`
       );
 
+      // 앵커 태그 라우팅
       const anchors = document.querySelectorAll("a.in-diagram");
       anchors.forEach((anchor) => {
         anchor.addEventListener("click", (e) => {
@@ -131,6 +134,7 @@ export default function TagView({ title, tags, related, impl }) {
         });
       });
 
+      // 그림자 적용
       current.insertAdjacentHTML("afterbegin", filter);
       ["rect", "circle"].forEach((shape) => {
         const drawElement = current.querySelectorAll(shape);
@@ -139,7 +143,6 @@ export default function TagView({ title, tags, related, impl }) {
             e.setAttribute("filter", `url(#drop-shadow)`);
           });
       });
-
       current.viewBox.baseVal.x -= 8;
       current.viewBox.baseVal.y -= 8;
       current.viewBox.baseVal.width += 10;
@@ -173,8 +176,7 @@ export default function TagView({ title, tags, related, impl }) {
   const onDragEnd = (e) => {
     scrollPos.left = preRef.current.scrollLeft;
     scrollPos.top = preRef.current.scrollTop;
-    if (isDragging)
-      e.preventDefault();
+    if (isDragging) e.preventDefault();
     isDragStarted = false;
     isDragging = false;
   };
@@ -182,7 +184,7 @@ export default function TagView({ title, tags, related, impl }) {
   return (
     <TagViewContainer>
       <TagViewWidth>
-        <h2 style={{padding: "0px 32px"}}>{title}</h2>
+        <h2 style={{ padding: "0px 32px" }}>{title}</h2>
         <MermaidPre
           id={id}
           ref={preRef}
