@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import mermaid from "mermaid";
 import { useNavigate } from "react-router-dom";
 import { maxContent, onPhone } from "../constants";
@@ -69,16 +69,24 @@ const filter = `
 </defs>
 `;
 
-export default function TagView({ title, tags, related, impl }) {
+export default function TagView({ title, root, tags, related, impl }) {
   const navigate = useNavigate();
-  const id = `mermaid-tag-${Math.random().toString().slice(2)}`;
 
-  const [postSet, setPostSet] = useState(new Set());
+  const postSet = useMemo(
+    () => new Set([...impl].map(({ tag }) => tag)),
+    [impl]
+  );
+  const preRef = useRef(null);
+  const isDragStarted = useRef(false);
+  const isDragging = useRef(false);
+  const startPos = useMemo(() => {
+    return { x: 0, y: 0 };
+  }, []);
+  const scrollPos = useMemo(() => {
+    return { left: 0, top: 0 };
+  }, []);
 
-  useEffect(() => {
-    setPostSet(new Set([...impl].map(({ tag }) => tag)));
-  }, [impl]);
-
+  // Mermaid 다이어그램을 로드하고 초기 설정을 진행
   useEffect(() => {
     const tagSet = new Set(tags.map(({ tag }) => tag));
 
@@ -90,7 +98,9 @@ export default function TagView({ title, tags, related, impl }) {
 
     for (const { tag, exp, tier } of tags) {
       const hasPost = postSet.has(tag);
-      let node = `<div style="height: 30px; font-family: Noto Sans KR; display: flex; align-items: center; gap: 5px">${
+      let node = `<div ${
+        tag === root ? `class="root-tag"` : null
+      } style="height: 30px; font-family: Noto Sans KR; display: flex; align-items: center; gap: 5px">${
         hasPost ? badge : ""
       }#${exp} <span style="opacity: 0.8; font-size: 0.8em;">${tag}</span></div>`;
       if (hasPost)
@@ -103,90 +113,111 @@ export default function TagView({ title, tags, related, impl }) {
 
     const graph = "graph LR\n" + main + def + tierColor;
 
-    mermaid.render(id + "-svg", graph).then(({ bindFunctions, svg }) => {
-      const pre = document.getElementById(id);
-      if (!pre) return;
-      pre.innerHTML = svg;
-      bindFunctions(pre);
+    mermaid
+      .render(`mermaid-tag-${Math.random().toString().slice(2)}`, graph)
+      .then(({ bindFunctions, svg }) => {
+        preRef.current.innerHTML = svg;
+        bindFunctions(preRef.current);
 
-      const current = pre.firstChild;
+        const current = preRef.current.firstChild;
 
-      // 크기 조정
-      const style = current.getAttribute("style");
-      const styleMap = new Map(
-        style
-          .trim()
-          .split(";")
-          .map((style) => style.split(":").map((text) => text.trim()))
-      );
-      const maxWidth = styleMap.get("max-width");
-      current.setAttribute(
-        "width",
-        `${Number(maxWidth.substring(0, maxWidth.length - 2)) * 0.8}px`
-      );
+        // 크기 조정
+        const style = current.getAttribute("style");
+        const styleMap = new Map(
+          style
+            .trim()
+            .split(";")
+            .map((style) => style.split(":").map((text) => text.trim()))
+        );
+        const maxWidth = styleMap.get("max-width");
+        current.setAttribute(
+          "width",
+          `${Number(maxWidth.substring(0, maxWidth.length - 2)) * 0.8}px`
+        );
 
-      // 앵커 태그 라우팅
-      const anchors = document.querySelectorAll("a.in-diagram");
-      anchors.forEach((anchor) => {
-        anchor.addEventListener("click", (e) => {
-          e.preventDefault();
-          navigate(anchor.getAttribute("href"));
-        });
-      });
-
-      // 그림자 적용
-      current.insertAdjacentHTML("afterbegin", filter);
-      ["rect", "circle"].forEach((shape) => {
-        const drawElement = current.querySelectorAll(shape);
-        if (drawElement)
-          drawElement.forEach((e) => {
-            e.setAttribute("filter", `url(#drop-shadow)`);
+        // 앵커 태그 라우팅
+        const anchors = document.querySelectorAll("a.in-diagram");
+        anchors.forEach((anchor) => {
+          anchor.addEventListener("click", (e) => {
+            e.preventDefault();
+            navigate(anchor.getAttribute("href"));
           });
+        });
+
+        // 그림자 적용
+        current.insertAdjacentHTML("afterbegin", filter);
+        ["rect", "circle"].forEach((shape) => {
+          const drawElement = current.querySelectorAll(shape);
+          if (drawElement)
+            drawElement.forEach((e) => {
+              e.setAttribute("filter", `url(#drop-shadow)`);
+            });
+        });
+        current.viewBox.baseVal.x -= 8;
+        current.viewBox.baseVal.y -= 8;
+        current.viewBox.baseVal.width += 10;
+        current.viewBox.baseVal.height += 10;
+
+        // 스크롤 초기화
+        const rootElement = document.querySelector(`[data-id="#${root}"]`);
+        if (rootElement) {
+          const [preRect, rootRect] = [preRef.current, rootElement].map(
+            (element) => element.getBoundingClientRect()
+          );
+          const [preCenter, rootCenter] = [preRect, rootRect].map((rect) => [
+            rect.left + rect.width / 2,
+            rect.top + rect.height / 2,
+          ]);
+          const [transX, transY] = [0, 1].map(
+            (i) => rootCenter[i] - preCenter[i]
+          );
+          preRef.current.scrollLeft = transX;
+          preRef.current.scrollTop = transY;
+          scrollPos.left = transX;
+          scrollPos.top = transY;
+        }
       });
-      current.viewBox.baseVal.x -= 8;
-      current.viewBox.baseVal.y -= 8;
-      current.viewBox.baseVal.width += 10;
-      current.viewBox.baseVal.height += 10;
-    });
-  }, [id, navigate, postSet, tags, related]);
+  }, [root, scrollPos, navigate, postSet, tags, related]);
 
-  const preRef = useRef(null);
-  let isDragStarted = false;
-  let isDragging = false;
-  let startPos = { x: 0, y: 0 };
-  let scrollPos = { left: 0, top: 0 };
+  const onDragStart = useCallback(
+    (e) => {
+      preRef.current.scrollLeft = scrollPos.left;
+      preRef.current.scrollTop = scrollPos.top;
+      startPos.x = e.pageX || e.touches[0].pageX;
+      startPos.y = e.pageY || e.touches[0].pageY;
+      isDragStarted.current = true;
+    },
+    [scrollPos, startPos]
+  );
 
-  const onDragStart = (e) => {
-    preRef.current.scrollLeft = scrollPos.left;
-    preRef.current.scrollTop = scrollPos.top;
-    startPos.x = e.pageX || e.touches[0].pageX;
-    startPos.y = e.pageY || e.touches[0].pageY;
-    isDragStarted = true;
-  };
+  const onDrag = useCallback(
+    (e) => {
+      if (!isDragStarted.current) return;
+      isDragging.current = true;
+      const pageX = e.pageX || e.touches[0].pageX;
+      const pageY = e.pageY || e.touches[0].pageY;
+      preRef.current.scrollLeft = scrollPos.left - (pageX - startPos.x);
+      preRef.current.scrollTop = scrollPos.top - (pageY - startPos.y);
+    },
+    [scrollPos, startPos]
+  );
 
-  const onDrag = (e) => {
-    if (!isDragStarted) return;
-    isDragging = true;
-    const pageX = e.pageX || e.touches[0].pageX;
-    const pageY = e.pageY || e.touches[0].pageY;
-    preRef.current.scrollLeft = scrollPos.left - (pageX - startPos.x);
-    preRef.current.scrollTop = scrollPos.top - (pageY - startPos.y);
-  };
-
-  const onDragEnd = (e) => {
-    scrollPos.left = preRef.current.scrollLeft;
-    scrollPos.top = preRef.current.scrollTop;
-    if (isDragging) e.preventDefault();
-    isDragStarted = false;
-    isDragging = false;
-  };
+  const onDragEnd = useCallback(
+    (e) => {
+      scrollPos.left = preRef.current.scrollLeft;
+      scrollPos.top = preRef.current.scrollTop;
+      if (isDragging.current) e.preventDefault();
+      isDragStarted.current = false;
+      isDragging.current = false;
+    },
+    [scrollPos]
+  );
 
   return (
     <TagViewContainer>
       <div>
         <h2 style={{ padding: "0px 32px" }}>{title}</h2>
         <MermaidPre
-          id={id}
           ref={preRef}
           onTouchStart={(e) => {
             onDragStart(e);

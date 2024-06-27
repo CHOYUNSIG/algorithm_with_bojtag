@@ -18,10 +18,10 @@ export default function TagGroup() {
   }, [dispatch]);
 
   useEffect(() => {
-    const { group, impl, related, tags } = tables;
+    const { group, grouproot, impl, related, tags } = tables;
     if (
       tagViews.has(groupName) ||
-      [group, impl, related, tags].includes(undefined)
+      [group, grouproot, impl, related, tags].includes(undefined)
     )
       return;
 
@@ -46,6 +46,7 @@ export default function TagGroup() {
       <TagView
         key={groupName}
         title={groupName}
+        root={lookup(grouproot, "group", groupName, "tag")[0]?.tag}
         tags={groupTags}
         related={related}
         impl={impl}

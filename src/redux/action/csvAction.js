@@ -1,4 +1,4 @@
-const tableList = ["group", "impl", "posts", "related", "tags"];
+const tableList = ["group", "grouproot", "impl", "posts", "related", "tags"];
 
 export const fetchSuccess = (name, table) => ({
   type: "FETCH_SUCCESS",

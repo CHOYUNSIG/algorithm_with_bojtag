@@ -35,9 +35,7 @@ export default function Post() {
   const [markdown, setMarkdown] = useState(null);
   const [meta, setMeta] = useState(null);
   const [header, setHeader] = useState(null);
-  const [nowPost, setNowPost] = useState(null);
-  const [prvPosts, setPrvPosts] = useState(null);
-  const [nxtPosts, setNxtPosts] = useState(null);
+  const [relatedTag, setRelatedTag] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const { tag } = useParams();
@@ -56,7 +54,6 @@ export default function Post() {
     const { impl, posts, tags } = tables;
     if (!impl || !posts || !tags) return;
     try {
-      const t = lookup(tags, "tag", tag, ["tag", "exp", "tier"])[0];
       const md = lookup(impl, "tag", tag, "md")[0].md;
       const meta = lookup(posts, "md", md, [
         "title",
@@ -70,7 +67,6 @@ export default function Post() {
         .then((text) => {
           setMarkdown(text);
           setMeta(meta);
-          setNowPost(t);
           setIsLoading(false);
         });
     } catch (e) {
@@ -90,17 +86,11 @@ export default function Post() {
         return row.next;
       });
 
-      for (const [tagList, setPosts] of [
-        [prv, setPrvPosts],
-        [nxt, setNxtPosts],
-      ]) {
-        let posts = [];
-        for (const t of tagList) {
-          const tagInfo = lookup(tags, "tag", t, ["tag", "exp", "tier"])[0];
-          posts.push(tagInfo);
-        }
-        setPosts(posts);
-      }
+      setRelatedTag(
+        [...prv, tag, ...nxt].map(
+          (tag) => lookup(tags, "tag", tag, ["tag", "exp", "tier"])[0]
+        )
+      );
     } catch (e) {}
   }, [tag, tables]);
 
@@ -119,10 +109,11 @@ export default function Post() {
           writer={meta.writer}
         />
       ) : null}
-      {nowPost && prvPosts && nxtPosts && tables.related && tables.impl ? (
+      {relatedTag && tables.related && tables.impl ? (
         <TagView
           title="관련 태그"
-          tags={[...prvPosts, nowPost, ...nxtPosts]}
+          root={tag}
+          tags={relatedTag}
           related={tables.related}
           impl={tables.impl}
         />
