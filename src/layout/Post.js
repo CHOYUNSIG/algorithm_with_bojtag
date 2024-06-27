@@ -71,9 +71,9 @@ export default function Post() {
           setMarkdown(text);
           setMeta(meta);
           setNowPost(t);
+          setIsLoading(false);
         });
     } catch (e) {
-    } finally {
       setIsLoading(false);
     }
   }, [tag, tables]);
@@ -146,6 +146,7 @@ export default function Post() {
         textAlign: "center",
         fontSize: "2em",
         wordBreak: "keep-all",
+        opacity: "0.8",
       }}
     >
       {isLoading ? (

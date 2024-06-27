@@ -9,7 +9,7 @@ import styled from "styled-components";
 import "highlight.js/styles/github-dark.css";
 import { useEffect, useState } from "react";
 import mermaid from "mermaid";
-import { onPhone } from "../constants";
+import { brandColor, onPhone } from "../constants";
 import { Link } from "react-router-dom";
 import ReactDOMServer from "react-dom/server";
 import parse from "html-react-parser";
@@ -94,7 +94,7 @@ const Main = styled.main`
       background-color: #555566;
 
       &:hover {
-        background-color: #ff7b72;
+        background-color: #${brandColor};
       }
     }
 
