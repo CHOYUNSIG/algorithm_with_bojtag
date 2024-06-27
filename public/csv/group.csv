@@ -1,10 +1,10 @@
 ﻿group,tag
-패러다임,greedy
-패러다임,dp
-패러다임,backtracking
-패러다임,divide_and_conquer
-패러다임,bruteforcing
-패러다임,heuristics	
+방법론,greedy
+방법론,dp
+방법론,backtracking
+방법론,divide_and_conquer
+방법론,bruteforcing
+방법론,heuristics	
 자료구조,graphs
 자료구조,graph_traversal
 자료구조,dfs
