@@ -6,7 +6,7 @@ import { maxContent, onPhone } from "../constants";
 
 const TagViewContainer = styled.div`
   width: 100%;
-  height: ${(props) => props.height || "500px"};
+  height: ${(props) => props.height || "fit-content"};
   box-sizing: border-box;
   padding: 16px;
   display: flex;
@@ -41,6 +41,7 @@ const MermaidPre = styled.pre`
   overflow: hidden;
   touch-action: none;
   cursor: grab;
+  user-select: none;
 `;
 
 const badge = `<span style="background-color: red; border-radius: 50%; display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;"><i class="fa fa-code"></i></span>`;
@@ -141,9 +142,11 @@ export default function TagView({ root, tags, related, impl, height }) {
         // 앵커 태그 라우팅
         const anchors = document.querySelectorAll("a.in-diagram");
         anchors.forEach((anchor) => {
+          anchor.setAttribute("draggable", "false");
           anchor.addEventListener("click", (e) => {
             e.preventDefault();
-            navigate(anchor.getAttribute("href"));
+            if (!isDragging.current)
+              navigate(anchor.getAttribute("href"));
           });
         });
 
@@ -184,6 +187,7 @@ export default function TagView({ root, tags, related, impl, height }) {
 
   const onDragStart = useCallback(
     (e) => {
+      isDragging.current = false;
       preRef.current.scrollLeft = scrollPos.left;
       preRef.current.scrollTop = scrollPos.top;
       startPos.x = e.pageX || e.touches[0].pageX;
@@ -209,9 +213,8 @@ export default function TagView({ root, tags, related, impl, height }) {
     (e) => {
       scrollPos.left = preRef.current.scrollLeft;
       scrollPos.top = preRef.current.scrollTop;
-      if (isDragging.current) e.preventDefault();
+      if (isDragging.current && e.cancelable) e.preventDefault();
       isDragStarted.current = false;
-      isDragging.current = false;
     },
     [scrollPos]
   );
