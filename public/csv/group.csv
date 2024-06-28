@@ -22,10 +22,19 @@
 자료구조,tree_set
 자료구조,hash_set
 자료구조,hashing
-정렬과 검색,parametric_search
-정렬과 검색,pbs
-정렬과 검색,binary_search
-정렬과 검색,sorting
+정렬과 탐색,dancing_links
+정렬과 탐색,knuth_x
+정렬과 탐색,parametric_search
+정렬과 탐색,pbs
+정렬과 탐색,binary_search
+정렬과 탐색,sorting
+정렬과 탐색,two_pointer
+정렬과 탐색,sliding_window
+정렬과 탐색,mitm
+정렬과 탐색,sqrt_decomposition
+정렬과 탐색,mo
+정렬과 탐색,bidirectional_search
+정렬과 탐색,offline_queries
 트리,hld
 트리,lazyprop
 트리,multi_segtree
