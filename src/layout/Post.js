@@ -79,12 +79,27 @@ export default function Post() {
     const { related, tags } = tables;
     if (!related || !tags) return;
     try {
-      const prv = lookup(related, "next", tag, "tag").map((row) => {
-        return row.tag;
+      const t = ["tag", "next"];
+
+      const [prv, nxt] = [0, 1].map((i) => {
+        return new Set(
+          lookup(related, t[i ^ 1], tag, t[i]).map((row) => {
+            return row[t[i]];
+          })
+        );
       });
-      const nxt = lookup(related, "tag", tag, "next").map((row) => {
-        return row.next;
-      });
+
+      [prv, nxt].forEach((set, i) => {
+        let size = 0;
+        while (size !== set.size) {
+          size = set.size;
+          [...set].forEach((tag) => {
+            lookup(related, t[i ^ 1], tag, t[i]).forEach((row) => {
+              set.add(row[t[i]]);
+            });
+          });
+        }
+      })
 
       setRelatedTag(
         [...prv, tag, ...nxt].map(
@@ -116,7 +131,6 @@ export default function Post() {
           tags={relatedTag}
           related={tables.related}
           impl={tables.impl}
-          height="fit-content"
         />
       ) : null}
       {markdown ? (
