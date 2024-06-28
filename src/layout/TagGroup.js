@@ -45,7 +45,6 @@ export default function TagGroup() {
       groupName,
       <TagView
         key={groupName}
-        title={groupName}
         root={lookup(grouproot, "group", groupName, "tag")[0]?.tag}
         tags={groupTags}
         related={related}

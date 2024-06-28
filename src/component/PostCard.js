@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import { brandColor } from "../constants";
 
 const Card = styled.div`
+  width: 100%;
+  box-sizing: border-box;
   border-radius: 16px;
   padding: 16px;
   box-shadow: 2px 2px 10px #aaaaaa;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
   transition: 0.2s;
 
   &:hover {
@@ -18,7 +20,7 @@ const Card = styled.div`
   h1 {
     margin: 0px;
     padding: 0px;
-    font-size: 1.5em;
+    font-size: 1.2em;
   }
 
   h2 {
@@ -30,6 +32,7 @@ const Card = styled.div`
 `;
 
 const IconSpan = styled.span`
+  font-size: 0.8em;
   display: flex;
   flex-direction: row;
   align-items: center;

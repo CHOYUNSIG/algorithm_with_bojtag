@@ -116,6 +116,7 @@ export default function Post() {
           tags={relatedTag}
           related={tables.related}
           impl={tables.impl}
+          height="fit-content"
         />
       ) : null}
       {markdown ? (

@@ -6,6 +6,7 @@ import { maxContent, onPhone } from "../constants";
 
 const TagViewContainer = styled.div`
   width: 100%;
+  height: ${(props) => props.height || "500px"};
   box-sizing: border-box;
   padding: 16px;
   display: flex;
@@ -14,30 +15,32 @@ const TagViewContainer = styled.div`
 
   @media (max-width: ${onPhone}px) {
     padding: 16px 0px;
-    display: block;
   }
 
   & > div {
     max-width: ${maxContent}px;
     width: 100%;
+    border-radius: 16px;
+    box-shadow: inset 2px 2px 10px #aaaaaa;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    @media (max-width: ${onPhone}px) {
+      border-radius: 0px;
+    }
   }
 `;
 
 const MermaidPre = styled.pre`
   max-width: 100%;
-  max-height: 50vh;
-  box-sizing: border-box;
+  margin: 0px;
   padding: 16px;
-  border-radius: 16px;
-  box-shadow: inset 2px 2px 10px #aaaaaa;
+  box-sizing: border-box;
   text-align: center;
   overflow: hidden;
   touch-action: none;
   cursor: grab;
-
-  @media (max-width: ${onPhone}px) {
-    border-radius: 0px;
-  }
 `;
 
 const badge = `<span style="background-color: red; border-radius: 50%; display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;"><i class="fa fa-code"></i></span>`;
@@ -69,7 +72,7 @@ const filter = `
 </defs>
 `;
 
-export default function TagView({ title, root, tags, related, impl }) {
+export default function TagView({ root, tags, related, impl, height }) {
   const navigate = useNavigate();
 
   const postSet = useMemo(
@@ -214,9 +217,8 @@ export default function TagView({ title, root, tags, related, impl }) {
   );
 
   return (
-    <TagViewContainer>
+    <TagViewContainer style={height ? { height: height } : undefined}>
       <div>
-        <h2 style={{ padding: "0px 32px" }}>{title}</h2>
         <MermaidPre
           ref={preRef}
           onTouchStart={(e) => {

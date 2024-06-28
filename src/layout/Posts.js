@@ -18,8 +18,13 @@ const CardWrapper = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    align-content: stretch;
+    justify-content: space-between;
     gap: 20px;
+
+    & > * {
+      flex-grow: 1;
+    }
   }
 `;
 

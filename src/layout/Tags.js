@@ -41,7 +41,8 @@ const PreviewWrapper = styled.div`
     border: dotted 3px #aaaaaa;
     border-radius: 16px;
     margin: 16px;
-    height: 50vh;
+    height: calc(50vh - 32px);
+    box-sizing: border-box;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -64,14 +65,23 @@ export default function Tags() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (pathname === "/tags") setSelected(null);
-  }, [pathname]);
-
-  useEffect(() => {
     const group = tables.group;
     if (!group) return;
     setGroupList([...new Set([...group].map((row) => row.group)), "기타"]);
   }, [tables]);
+
+  useEffect(() => {
+    if (pathname === "/tags") {
+      setSelected(null);
+      return;
+    }
+    try {
+      const decoded = decodeURIComponent(pathname.slice(6));
+      setSelected(groupList.indexOf(decoded));
+    } catch (e) {
+      setSelected(-1);
+    }
+  }, [pathname, groupList]);
 
   return (
     <div>
@@ -102,6 +112,18 @@ export default function Tags() {
               }}
             ></i>
             카테고리를 선택하세요.
+          </div>
+        </PreviewWrapper>
+      ) : selected === -1 ? (
+        <PreviewWrapper>
+          <div>
+            <i
+              className="fa fa-question"
+              style={{
+                padding: "16px",
+              }}
+            ></i>
+            잘못된 카테고리입니다.
           </div>
         </PreviewWrapper>
       ) : (
