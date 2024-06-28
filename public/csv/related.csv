@@ -136,6 +136,7 @@ probability,linearity_of_expectation
 probability,randomization
 probability,differential_cryptanalysis
 probability,birthday
+probability,simulated_annealing
 numerical_analysis,linear_programming
 numerical_analysis,polynomial_interpolation
 arithmetic,arbitrary_precision
