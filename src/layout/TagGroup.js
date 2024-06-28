@@ -49,6 +49,7 @@ export default function TagGroup() {
         tags={groupTags}
         related={related}
         impl={impl}
+        height="500px"
       />
     );
     setTagViews(newTagViews);

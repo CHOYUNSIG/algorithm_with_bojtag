@@ -41,7 +41,7 @@ const PreviewWrapper = styled.div`
     border: dotted 3px #aaaaaa;
     border-radius: 16px;
     margin: 16px;
-    height: calc(50vh - 32px);
+    height: calc(500px - 32px);
     box-sizing: border-box;
     text-align: center;
     display: flex;
