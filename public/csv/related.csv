@@ -17,6 +17,7 @@ graph_traversal,dfs
 recursion,dfs
 hashing,hash_set
 dancing_links,knuth_x
+sorting,lis
 sorting,binary_search
 sorting,mo
 binary_search,parametric_search
@@ -32,8 +33,8 @@ trees,euler_tour_technique
 trees,centroid
 trees,tree_compression
 trees,tree_decomposition
-tree_set,splay_tree
 tree_set,rb_tree
+tree_set,splay_tree
 priority_queue,cartesian_tree
 lca,link_cut_tree
 lca,hld
@@ -135,8 +136,8 @@ probability,bayes
 probability,linearity_of_expectation
 probability,randomization
 probability,differential_cryptanalysis
-probability,birthday
 probability,simulated_annealing
+probability,birthday
 numerical_analysis,linear_programming
 numerical_analysis,polynomial_interpolation
 arithmetic,arbitrary_precision
