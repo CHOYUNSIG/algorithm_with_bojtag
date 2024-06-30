@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import { maxContent } from "../constants";
+import { appName, appNameKorean, maxContent } from "../constants";
 import { Link } from "react-router-dom";
-import { brandColor } from "../constants";
 
 const HomeWrapper = styled.div`
   display: flex;
@@ -12,7 +11,26 @@ const HomeWrapper = styled.div`
     max-width: ${maxContent}px;
     box-sizing: border-box;
     padding: 16px;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h1 {
+      width: fit-content;
+      padding: 5px 32px;
+      border-radius: 100px;
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: inset 2px 2px 10px #aaaaaa;
+    }
+
+    p {
+      text-align: center;
+      word-break: keep-all;
+    }
   }
 `;
 
@@ -56,15 +74,19 @@ export default function Home() {
       <div>
         <img
           src="/img/icons/safari-pinned-tab.svg"
-          style={{ width: "200px" }}
+          style={{ width: "200px", userSelect: "none" }}
         ></img>
-        <h1>APSwBT</h1>
+        <h1>
+          {"#" + appNameKorean}
+          <sub style={{ fontSize: "0.5em", opacity: "0.5" }}>
+            {appName.toLowerCase()}
+          </sub>
+        </h1>
         <div style={{ opacity: "0.8" }}>
-          <u>A</u>lgorithm <u>P</u>roblem <u>S</u>olving <u>w</u>ith <u>B</u>OJ{" "}
-          <u>T</u>ag
+          Algorithm Problem Solving with BOJ Tag
         </div>
-        <p style={{ wordBreak: "keep-all" }}>
-          이 블로그는 문제 해결에 쓰이는 알고리즘을 백준 태그를 중심으로 정리한
+        <p>
+          {appNameKorean}는 문제 해결에 쓰이는 알고리즘을 <a href="https://www.acmicpc.net/" target="blank">백준</a> 태그를 중심으로 정리한
           블로그입니다.
         </p>
         <div

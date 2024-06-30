@@ -3,6 +3,7 @@ import useWindowSize from "../hook/useWindowSize";
 import useScrollPosition from "../hook/useScrollPosition";
 import { headerHeight, maxContent } from "../constants";
 import { Link } from "react-router-dom";
+import { appName } from "../constants";
 
 const HeaderWrapper = styled.header`
   box-sizing: border-box;
@@ -64,14 +65,14 @@ export default function Header() {
         >
           <NoLineLink to="/">
             <img
-              title="APSwBT"
+              title={appName}
               src="/img/icons/favicon.ico"
               width="50px"
               height="50px"
               alt="icon"
             />
           </NoLineLink>
-          <NoLineLink to="/">APSwBT</NoLineLink>
+          <NoLineLink to="/">{appName}</NoLineLink>
         </div>
 
         <Nav>
