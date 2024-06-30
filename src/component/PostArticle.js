@@ -117,6 +117,12 @@ const Main = styled.main`
       padding: 0px;
       margin: 0px;
     }
+
+    & > svg {
+      @media (max-width: ${onPhone}px) {
+        max-height: 50vh;
+      }
+    }
   }
 
   & > mjx-container {
@@ -151,7 +157,6 @@ function decodeHTMLEntities(text) {
     "&lt;": "<",
     "&gt;": ">",
     "&nbsp;": " ",
-    // 필요한 다른 엔티티들을 여기에 추가할 수 있습니다.
   };
 
   return text.replace(/&[^;]+;/g, (match) => entities[match] || match);
