@@ -75,6 +75,7 @@ export default function Home() {
         <img
           src="/img/icons/safari-pinned-tab.svg"
           style={{ width: "200px", userSelect: "none" }}
+          alt="site-icon"
         ></img>
         <h1>
           {"#" + appNameKorean}
