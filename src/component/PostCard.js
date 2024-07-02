@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { brandColor } from "../constants";
+import { brandColor, standardShadow } from "../constants";
 
 const Card = styled.div`
   width: 100%;
   box-sizing: border-box;
   border-radius: 16px;
   padding: 16px;
-  box-shadow: 2px 2px 10px #aaaaaa;
+  box-shadow: ${standardShadow};
   display: flex;
   flex-direction: column;
   gap: 10px;

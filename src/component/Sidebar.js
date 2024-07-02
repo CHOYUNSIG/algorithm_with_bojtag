@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Slugger from "github-slugger";
-import { headerHeight } from "../constants";
+import { headerHeight, standardShadow } from "../constants";
 
 const SidebarWrapper = styled.nav`
   min-width: 200px;
@@ -10,20 +10,10 @@ const SidebarWrapper = styled.nav`
   position: sticky;
   top: ${headerHeight + 32}px;
   border-radius: 16px;
-  box-shadow: 2px 2px 10px #aaaaaa;
+  box-shadow: ${standardShadow};
   display: flex;
   flex-direction: column;
   justify-content: left;
-`;
-
-const Anker = styled.a`
-  color: black;
-  text-decoration: none;
-  padding-left: ${(props) => props.$depth * 16}px;
-
-  &:hover {
-    text-decoration: underline black;
-  }
 `;
 
 export default function Sidebar({ side }) {
@@ -38,9 +28,9 @@ export default function Sidebar({ side }) {
         side.map(({ depth, header }) => {
           const slugForm = slugger.slug(header);
           return (
-            <Anker
+            <a
               key={slugForm}
-              $depth={depth}
+              style={{paddingLeft: `${16 * depth}px`}}
               href={"#" + slugForm}
               onClick={(e) => {
                 e.preventDefault();
@@ -52,7 +42,7 @@ export default function Sidebar({ side }) {
               }}
             >
               {header}
-            </Anker>
+            </a>
           );
         })
       }

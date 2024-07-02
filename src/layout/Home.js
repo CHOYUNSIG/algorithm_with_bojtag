@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { appName, appNameKorean, maxContent } from "../constants";
+import { appName, appNameKorean, maxContent, standardShadow } from "../constants";
 import { Link } from "react-router-dom";
 
 const HomeWrapper = styled.div`
@@ -17,14 +17,11 @@ const HomeWrapper = styled.div`
 
     h1 {
       width: fit-content;
-      padding: 5px 32px;
-      border-radius: 100px;
       display: flex;
       flex-direction: row;
       align-items: baseline;
       justify-content: center;
       gap: 10px;
-      box-shadow: inset 2px 2px 10px #aaaaaa;
     }
 
     p {
@@ -41,7 +38,7 @@ const Button = styled.button`
   background-color: transparent;
   border: none;
   border-radius: 16px;
-  box-shadow: 2px 2px 10px #aaaaaa;
+  box-shadow: ${standardShadow};
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -55,15 +52,6 @@ const Button = styled.button`
   &:hover {
     * {
       font-size: 1.6em;
-    }
-  }
-
-  a {
-    color: black;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
     }
   }
 `;

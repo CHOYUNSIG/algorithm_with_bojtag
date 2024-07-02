@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import mermaid from "mermaid";
 import { useNavigate } from "react-router-dom";
-import { maxContent, onPhone } from "../constants";
+import { maxContent, onPhone, standardShadow } from "../constants";
 
 const TagViewContainer = styled.div`
   width: 100%;
@@ -21,7 +21,7 @@ const TagViewContainer = styled.div`
     max-width: ${maxContent}px;
     width: 100%;
     border-radius: 16px;
-    box-shadow: inset 2px 2px 10px #aaaaaa;
+    box-shadow: inset ${standardShadow};
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -104,9 +104,9 @@ export default function TagView({ root, tags, related, impl, height }) {
       const hasPost = postSet.has(tag);
       let node = `<div ${
         tag === root ? `class="root-tag"` : null
-      } style="height: 30px; font-family: Noto Sans KR; display: flex; align-items: center; gap: 5px">${
+      } style="height: 30px; font-family: Noto Sans KR; display: flex; align-items: center; gap: 5px;">${
         hasPost ? badge : ""
-      }#${exp} <span style="opacity: 0.8; font-size: 0.8em;">${tag}</span></div>`;
+      }<div style="display: flex; align-items: baseline; gap: 5px;">#${exp}<span style="opacity: 0.8; font-size: 0.8em;">${tag}</span></div></div>`;
       if (hasPost)
         node =
           `<a class="in-diagram" style="color: white; text-decoration: none;" href="/post/${tag}">` +
@@ -145,8 +145,7 @@ export default function TagView({ root, tags, related, impl, height }) {
           anchor.setAttribute("draggable", "false");
           anchor.addEventListener("click", (e) => {
             e.preventDefault();
-            if (!isDragging.current)
-              navigate(anchor.getAttribute("href"));
+            if (!isDragging.current) navigate(anchor.getAttribute("href"));
           });
         });
 

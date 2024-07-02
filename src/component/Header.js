@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import useWindowSize from "../hook/useWindowSize";
 import useScrollPosition from "../hook/useScrollPosition";
-import { headerHeight, maxContent } from "../constants";
+import { headerHeight, maxContent, standardShadow } from "../constants";
 import { Link } from "react-router-dom";
 import { appName } from "../constants";
 
@@ -24,7 +24,7 @@ const HeaderWrapper = styled.header`
     !props.$top &&
     css`
       background-color: white;
-      box-shadow: 0px 0px 10px #aaaaaa;
+      box-shadow: ${standardShadow};
     `}
 `;
 
@@ -33,18 +33,12 @@ const Nav = styled.nav`
   justify-content: space-between;
   flex-direction: row;
   align-items: center;
-  gap: 30px;
-`;
+  gap: ${(props) => props.gap || "30px"};
 
-const NoLineLink = styled(Link)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  text-decoration: none;
-  color: black;
-
-  &:hover {
-    text-decoration: underline black;
+  a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 `;
 
@@ -55,30 +49,28 @@ export default function Header() {
   return (
     <div>
       <HeaderWrapper $top={y === 0}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            flexDirection: "row",
-            gap: "10px",
-          }}
-        >
-          <NoLineLink to="/">
+        <Nav gap="20px">
+          <Link to="/">
             <img
               title={appName}
               src="/img/icons/favicon.ico"
               width="50px"
               height="50px"
               alt="icon"
+              style={{
+                transition: "0.2s",
+                borderRadius: "16px",
+                boxShadow: y === 0 ? standardShadow : "none",
+              }}
             />
-          </NoLineLink>
-          <NoLineLink to="/">{appName}</NoLineLink>
-        </div>
+          </Link>
+          <Link to="/">{appName}</Link>
+        </Nav>
 
         <Nav>
-          {width > 400 ? <NoLineLink to="/">HOME</NoLineLink> : null}
-          <NoLineLink to="/tags">TAGS</NoLineLink>
-          <NoLineLink to="/post">POSTS</NoLineLink>
+          {width > 400 ? <Link to="/">HOME</Link> : null}
+          <Link to="/tags">TAGS</Link>
+          <Link to="/post">POSTS</Link>
         </Nav>
       </HeaderWrapper>
       <div

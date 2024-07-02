@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { fetchTable } from "../redux/action/csvAction";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { brandColor, maxContent } from "../constants";
+import { brandColor, maxContent, standardShadow } from "../constants";
 
 const ButtonWrapper = styled.div`
   padding: 8px;
@@ -17,7 +17,7 @@ const Button = styled.button`
   background-color: transparent;
   border: none;
   border-radius: 16px;
-  box-shadow: 2px 2px 10px #aaaaaa;
+  box-shadow: ${standardShadow};
   transition: 0.2s;
 
   &:hover {

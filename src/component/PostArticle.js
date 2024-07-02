@@ -9,7 +9,7 @@ import styled from "styled-components";
 import "highlight.js/styles/github-dark.css";
 import { useEffect, useState } from "react";
 import mermaid from "mermaid";
-import { brandColor, onPhone } from "../constants";
+import { brandColor, onPhone, standardShadow } from "../constants";
 import { Link } from "react-router-dom";
 import ReactDOMServer from "react-dom/server";
 import parse from "html-react-parser";
@@ -70,7 +70,7 @@ const Main = styled.main`
     border-radius: 16px;
     margin: 0px 48px;
     padding: 32px;
-    box-shadow: 2px 2px 10px #aaaaaa;
+    box-shadow: ${standardShadow};
 
     @media (max-width: ${onPhone}px) {
       width: 100%;
@@ -119,9 +119,8 @@ const Main = styled.main`
     }
 
     & > svg {
-      @media (max-width: ${onPhone}px) {
-        max-height: 50vh;
-      }
+      max-width: none !important;
+      max-height: 50vh;
     }
   }
 
