@@ -1,5 +1,8 @@
 ﻿tag,next
 bruteforcing,backtracking
+greedy,dijkstra
+divide_and_conquer,segtree
+dp,lca
 data_structures,stack
 data_structures,queue
 data_structures,string
@@ -34,9 +37,11 @@ trees,euler_tour_technique
 trees,centroid
 trees,tree_compression
 trees,tree_decomposition
+trees,trie
 tree_set,rb_tree
 tree_set,splay_tree
 priority_queue,cartesian_tree
+priority_queue,mst
 lca,link_cut_tree
 lca,hld
 centroid,centroid_decomposition
@@ -53,6 +58,7 @@ euler_tour_technique,lca
 lazyprop,link_cut_tree
 disjoint_set,offline_dynamic_connectivity
 disjoint_set,smaller_to_larger
+disjoint_set,mst
 graphs,flood_fill
 graphs,eulerian_path
 graphs,tsp
