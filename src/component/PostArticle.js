@@ -34,6 +34,10 @@ const Main = styled.main`
     padding: 0px 32px;
   }
 
+  p {
+    text-indent: 1em;
+  }
+
   h1,
   h2 {
     padding-top: 64px;
@@ -114,6 +118,7 @@ const Main = styled.main`
     justify-content: center;
 
     p, div, span {
+      text-indent: 0px;
       padding: 0px;
       margin: 0px;
     }
@@ -167,7 +172,7 @@ export default function PostArticle({ markdown }) {
 
   // 1차 (태그를 전부 확인해 SVG를 비동기 로드)
   useEffect(() => {
-    const matches = markdown.match(/class="mermaid"/g).length;
+    const matches = markdown.match(/class="mermaid"/g);
     const total = matches ? matches.length : 0;
     const newSvgs = Array(total).fill(null);
     let i = 0;
