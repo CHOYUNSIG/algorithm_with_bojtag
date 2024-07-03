@@ -1,6 +1,7 @@
 ﻿tag,next
 bruteforcing,backtracking
 greedy,dijkstra
+greedy,mst
 divide_and_conquer,segtree
 dp,lca
 data_structures,stack
