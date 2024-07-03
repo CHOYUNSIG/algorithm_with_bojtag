@@ -50,8 +50,8 @@ const Main = styled.main`
   }
 
   blockquote {
+    background-color: #00000010;
     border-left: solid 3px #aaaaaa;
-    padding-left: 16px;
     color: #555555;
   }
 
