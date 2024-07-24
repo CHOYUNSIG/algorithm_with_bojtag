@@ -114,7 +114,7 @@ export default function Post() {
     if (markdown) setHeader(headerExtractor(markdown));
   }, [markdown]);
 
-  return markdown ? (
+  return markdown !== null ? (
     <div>
       {meta ? (
         <PostBanner
@@ -137,7 +137,7 @@ export default function Post() {
         <PostWrapper>
           <div>
             <PostArticle markdown={markdown} />
-            {width > onPhone && header ? <Sidebar side={header} /> : null}
+            {width > onPhone && header?.length ? <Sidebar side={header} /> : null}
           </div>
         </PostWrapper>
       ) : null}
