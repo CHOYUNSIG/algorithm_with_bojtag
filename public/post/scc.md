@@ -1,5 +1,44 @@
 ## 소개
 
+강한 연결이라는 개념은 방향 그래프에서 정의된다. 방향 그래프의 어떠한 두 정점이 강하게 연결되었다는 것은 서로가 서로에게 도달 가능하다는 것을 의미한다. 강한 연결 요소란 방향 그래프의 부분 그래프이며, 부분 그래프 내의 모든 정점이 서로 강하게 연결되어 있으면서 그 크기가 최대인 그래프를 말한다. 다음 그래프에서 강한 연결 요소를 찾아보자.
+
+<pre class="mermaid">
+    graph LR
+
+    E --> A
+    A --> B
+    B --> C
+    C --> A
+    B --> D
+
+    A((A))
+    B((B))
+    C((C))
+    D((D))
+    E((E))
+</pre>
+
+정점 $\text A$, $\text B$, $\text C$는 서로가 서로에게 가는 경로가 존재하므로 하나의 강한 연결 요소를 이룬다. 정점 $\text E$와 $\text D$는 자기 자신과 강하게 연결된 다른 정점이 존재하지 않지만, 그 자체로도 하나의 강한 연결 요소를 이룬다. 따라서 위 그래프에서 강한 연결 요소는 3개이며 다음과 같다.
+
+<pre class="mermaid">
+    graph LR
+
+    E --> A
+    A --> B
+    B --> C
+    C --> A
+    B --> D
+
+    A((A)):::red
+    B((B)):::red
+    C((C)):::red
+    D((D)):::green
+    E((E)):::blue
+
+    classDef red stroke:#F00, fill:#FEE
+    classDef green stroke:#0F0, fill:#EFE
+    classDef blue stroke:#00F, fill:#EEF
+</pre>
 
 ## 탐색
 
