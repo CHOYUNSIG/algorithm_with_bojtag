@@ -1,3 +1,5 @@
+import csvToTable from "../../util/csvToTable";
+
 const tableList = ["group", "grouproot", "impl", "posts", "related", "tags"];
 
 export const fetchSuccess = (name, table) => ({
@@ -14,17 +16,8 @@ export const fetchTable = () => {
           continue;
         const response = await fetch("/csv/" + name + ".csv");
         const text = await response.text();
-        const table = text
-          .split("\n")
-          .map((row) => row.split(",").map((data) => data.trim()));
-        let result = new Set();
-        for (let row = 1; row < table.length; row++) {
-          let newRow = {};
-          for (let col = 0; col < table[row].length; col++)
-            newRow[table[0][col]] = table[row][col];
-          result.add(newRow);
-        }
-        dispatch(fetchSuccess(name, result));
+        const table = csvToTable(text);
+        dispatch(fetchSuccess(name, table));
       }
     } catch (e) {}
   };
