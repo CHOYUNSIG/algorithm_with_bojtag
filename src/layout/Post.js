@@ -62,6 +62,8 @@ export default function Post() {
         "writer",
       ])[0];
 
+      setIsLoading(true);
+      setMarkdown(null);
       fetch("/post/" + md + ".md")
         .then((response) => response.text())
         .then((text) => {
@@ -99,7 +101,7 @@ export default function Post() {
             });
           });
         }
-      })
+      });
 
       setRelatedTag(
         [...prv, tag, ...nxt].map(
@@ -137,7 +139,9 @@ export default function Post() {
         <PostWrapper>
           <div>
             <PostArticle markdown={markdown} />
-            {width > onPhone && header?.length ? <Sidebar side={header} /> : null}
+            {width > onPhone && header?.length ? (
+              <Sidebar side={header} />
+            ) : null}
           </div>
         </PostWrapper>
       ) : null}
