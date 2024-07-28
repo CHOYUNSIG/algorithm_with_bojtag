@@ -12,7 +12,6 @@ import mermaid from "mermaid";
 import { brandColor, onPhone, standardShadow } from "../constants";
 import { Link } from "react-router-dom";
 import ReactDOMServer from "react-dom/server";
-import parse from "html-react-parser";
 
 const Main = styled.main`
   box-sizing: border-box;
@@ -117,7 +116,9 @@ const Main = styled.main`
     flex-direction: row;
     justify-content: center;
 
-    p, div, span {
+    p,
+    div,
+    span {
       text-indent: 0px;
       padding: 0px;
       margin: 0px;
@@ -131,7 +132,7 @@ const Main = styled.main`
 
   & > mjx-container {
     padding: 16px;
-    
+
     & > svg {
       max-width: 100%;
     }
@@ -198,14 +199,17 @@ export default function PostArticle({ markdown }) {
                       .join("")
               );
 
-              mermaid.render(`mermaid-render-${index}`, text).then(({ svg }) => {
-                newSvgs[index] = svg;
-                if (!newSvgs.includes(null)) setSvgs(newSvgs);
-              });
+              mermaid
+                .render(`mermaid-render-${index}`, text)
+                .then(({ svg }) => {
+                  newSvgs[index] = svg;
+                  if (!newSvgs.includes(null)) setSvgs(newSvgs);
+                });
 
               return (
                 <pre
                   {...props}
+                  id={`pre-mermaid-${index}`}
                   children={<div>wait for diagram rendering...</div>}
                 />
               );
@@ -222,32 +226,12 @@ export default function PostArticle({ markdown }) {
 
   // 2차 (로드된 SVG 태그를 반영)
   useEffect(() => {
-    if (!svgs) return;
+    if (svgs === null || markdown === null) return;
 
-    let i = 0;
-
-    setMarked(
-      <ReactMarkdown
-        components={{
-          a(props) {
-            const { href, ...rest } = props;
-            return <Link to={href} {...rest} />;
-          },
-
-          pre(props) {
-            const { className } = props;
-            if (className === "mermaid") {
-              const svg = svgs[i++];
-              return <pre {...props}>{svg ? parse(svg) : <div>failed to render.</div>}</pre>;
-            } else return <pre {...props} />;
-          },
-        }}
-        remarkPlugins={[remarkMath, remarkGfm]}
-        rehypePlugins={[rehypeHighlight, rehypeMathjax, rehypeSlug, rehypeRaw]}
-      >
-        {markdown}
-      </ReactMarkdown>
-    );
+    for (let index = 0; index < svgs.length; index++) {
+      const pre = document.getElementById(`pre-mermaid-${index}`);
+      pre.innerHTML = svgs[index];
+    }
 
     setSvgs(null);
   }, [svgs, markdown]);
